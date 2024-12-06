@@ -23,5 +23,16 @@ namespace LightCurve.Core.Tools
             var dir = Path.GetDirectoryName(dialog.FileName);
             return string.IsNullOrEmpty(dir) ? "" : dir;
         }
+
+        /// <summary> 选择多个待处理的文件 </summary>
+        internal static string[] PickInputs()
+        {
+            OpenFileDialog ofd = new()
+            {
+                Title = "选择待处理的文件",
+                Multiselect = true,
+            };
+            return ofd.ShowDialog() == true ? ofd.FileNames : [];
+        }
     }
 }

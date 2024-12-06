@@ -30,38 +30,56 @@
             <ColumnDefinition Width="12" />
         </Grid.ColumnDefinitions>
         <ListBox
-            x:Name="LBFiles"
+            x:Name="LBPaths"
             Grid.Row ="1"
             Grid.Column ="1"
             Grid.ColumnSpan="3"
             Margin="0,0,4,0"
             SelectionMode="Multiple" />
         <Button
-            x:Name="BtAddFiles"
+            x:Name="BtAddPaths"
             Grid.Row ="3"
             Grid.Column ="1"
             Margin="0,0,12,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
+            Click="BtAddPaths_Click"
             Content="添加文件" />
         <Button
-            x:Name="BtRemoveFiles"
+            x:Name="BtRemovePaths"
             Grid.Row ="3"
             Grid.Column ="2"
             Margin="0,0,12,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
+            Click="BtRemovePaths_Click"
             Content="移除文件"
             IsEnabled="False" />
-        <Button
-            x:Name="BtHelp"
+        <ComboBox
+            x:Name="CBOrder"
             Grid.Row ="3"
             Grid.Column ="3"
             Margin="0,0,4,0"
-            Background="#FFE0E0E0"
-            BorderBrush="#FFA0A0A0"
-            Click="BtHelp_Click"
-            Content="帮助和说明" />
+            VerticalContentAlignment="Center"
+            IsEnabled="False"
+            SelectedIndex="0"
+            SelectionChanged="CBOrder_SelectionChanged">
+            <ComboBoxItem Content="文件名" />
+            <ComboBoxItem Content="创建时间" />
+            <ComboBoxItem Content="拍摄时间" />
+            <ComboBoxItem Content="修改时间" />
+            <ComboBoxItem Content="文件大小" />
+        </ComboBox>
+        <CheckBox
+            x:Name="CBDescending"
+            Grid.Row="3"
+            Grid.Column="4"
+            Margin="12,0,0,0"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Checked="CBDescending_Checked"
+            Content="降序"
+            IsEnabled="False" />
         <Label
             Grid.Row ="1"
             Grid.Column ="4"
@@ -225,9 +243,8 @@
         <Button
             x:Name="BtRun"
             Grid.Row ="3"
-            Grid.Column ="4"
-            Grid.ColumnSpan="2"
-            Margin="8,0,0,0"
+            Grid.Column ="5"
+            Margin="6,0,0,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
             Content="开始分析"

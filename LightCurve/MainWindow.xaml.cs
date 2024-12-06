@@ -7,18 +7,21 @@ namespace LightCurve
     /// <summary> Interaction logic for MainWindow.xaml </summary>
     public partial class MainWindow : Window
     {
-        #region 加载和帮助
+        #region 加载、绑定和帮助
 
-        public MainWindow() => InitializeComponent();
+        private readonly List<string> paths = [];
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            LBPaths.ItemsSource = paths;
+        }
 
         private void MW_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F1)
                 Core.Help.Show();
         }
-
-        private void BtHelp_Click(object sender, RoutedEventArgs e)
-            => Core.Help.Show();
 
         #endregion
 
@@ -70,7 +73,35 @@ namespace LightCurve
             => TBOutputPath.Text = Core.Tools.File.SelectOutputDir(CBOutputType.SelectedIndex);
 
         private void TBOutputPath_TextChanged(object sender, TextChangedEventArgs e)
-            => BtRun.IsEnabled = BtRemoveFiles.IsEnabled && TBOutputPath.Text.Length > 0;
+            => BtRun.IsEnabled = BtRemovePaths.IsEnabled && TBOutputPath.Text.Length > 0;
+
+        #endregion
+
+        #region 添加和移除文件
+
+        private void BtAddPaths_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtRemovePaths_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        #region 排序文件
+
+        private void CBOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CBDescending_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         #endregion
     }
