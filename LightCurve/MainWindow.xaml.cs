@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -9,13 +10,9 @@ namespace LightCurve
     {
         #region 加载、绑定和帮助
 
-        private readonly List<string> paths = [];
+        private List<FileInfo> files = [];
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            LBPaths.ItemsSource = paths;
-        }
+        public MainWindow() => InitializeComponent();
 
         private void MW_KeyDown(object sender, KeyEventArgs e)
         {
@@ -94,13 +91,23 @@ namespace LightCurve
         #region 排序文件
 
         private void CBOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+            => ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
 
         private void CBDescending_Checked(object sender, RoutedEventArgs e)
-        {
+            => ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
 
+        private void ReOrderPaths(int orderIndex, bool descending)
+        {
+            Func<FileInfo, object> judge = orderIndex switch
+            {
+                1 => x => x.CreationTime,
+                2 => x => x.LastWriteTime,
+                3 => x => x.Length,
+                _ => x => x.Name, // 0也是按文件名
+            };
+            files = [.. descending
+                ? files.OrderByDescending(judge)
+                : files.OrderBy(judge)];
         }
 
         #endregion

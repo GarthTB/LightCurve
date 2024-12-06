@@ -66,7 +66,6 @@
             SelectionChanged="CBOrder_SelectionChanged">
             <ComboBoxItem Content="文件名" />
             <ComboBoxItem Content="创建时间" />
-            <ComboBoxItem Content="拍摄时间" />
             <ComboBoxItem Content="修改时间" />
             <ComboBoxItem Content="文件大小" />
         </ComboBox>
