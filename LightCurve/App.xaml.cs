@@ -4,8 +4,6 @@ using System.Windows;
 
 namespace LightCurve
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+    /// <summary> Interaction logic for App.xaml </summary>
     public partial class App : Application { }
 }

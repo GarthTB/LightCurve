@@ -51,7 +51,8 @@
             Margin="0,0,12,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
-            Content="移除文件" />
+            Content="移除文件"
+            IsEnabled="False" />
         <Button
             x:Name="BtHelp"
             Grid.Row ="3"
@@ -130,6 +131,7 @@
             VerticalAlignment="Top"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
+            Click="BtSelOutputPath_Click"
             Content="选择位置" />
         <TextBox
             x:Name="TBOutputPath"
@@ -138,6 +140,7 @@
             Grid.ColumnSpan="2"
             Margin="8,109,0,108"
             IsReadOnly="True"
+            TextChanged="TBOutputPath_TextChanged"
             TextWrapping="Wrap" />
         <Label
             Grid.Row ="1"
@@ -156,7 +159,8 @@
             Margin="4,0,0,72"
             VerticalAlignment="Bottom"
             VerticalContentAlignment="Center"
-            SelectedIndex="0">
+            SelectedIndex="0"
+            SelectionChanged="CBRange_SelectionChanged">
             <ComboBoxItem Content="整个画面" />
             <ComboBoxItem Content="选定区域" />
         </ComboBox>
@@ -183,28 +187,40 @@
                 Grid.Column ="0"
                 Margin="0,0,0,0"
                 HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                IsEnabled="False"
+                Text="0"
+                TextChanged="TBRangeX_TextChanged" />
             <TextBox
                 x:Name="TBRangeY"
                 Grid.Row ="0"
                 Grid.Column ="2"
                 Margin="0,0,0,0"
                 HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                IsEnabled="False"
+                Text="0"
+                TextChanged="TBRangeY_TextChanged" />
             <TextBox
                 x:Name="TBRangeW"
                 Grid.Row ="2"
                 Grid.Column ="0"
                 Margin="0,0,0,0"
                 HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                IsEnabled="False"
+                Text="1"
+                TextChanged="TBRangeW_TextChanged" />
             <TextBox
                 x:Name="TBRangeH"
                 Grid.Row ="2"
                 Grid.Column ="2"
                 Margin="0,0,0,0"
                 HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                IsEnabled="False"
+                Text="1"
+                TextChanged="TBRangeH_TextChanged" />
         </Grid>
         <Button
             x:Name="BtRun"
@@ -214,6 +230,7 @@
             Margin="8,0,0,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
-            Content="开始分析" />
+            Content="开始分析"
+            IsEnabled="False" />
     </Grid>
 </Window>
