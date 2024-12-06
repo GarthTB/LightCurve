@@ -10,6 +10,7 @@
     Height="400"
     mc:Ignorable="d"
     FontSize="16"
+    KeyDown="MW_KeyDown"
     Title="LightCurve">
     <Grid>
         <Grid.RowDefinitions>
@@ -58,6 +59,7 @@
             Margin="0,0,4,0"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
+            Click="BtHelp_Click"
             Content="帮助和说明" />
         <Label
             Grid.Row ="1"
@@ -67,7 +69,7 @@
             VerticalAlignment="Top"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            Content="被测通道" />
+            Content="被测指标" />
         <ComboBox
             x:Name="CBChannel"
             Grid.Row ="1"
@@ -77,17 +79,16 @@
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
             SelectedIndex="0">
-            <ComboBoxItem Content="RGB的和" />
+            <ComboBoxItem Content="HSI亮度" />
+            <ComboBoxItem Content="HSL亮度" />
+            <ComboBoxItem Content="HSV亮度" />
             <ComboBoxItem Content="R" />
             <ComboBoxItem Content="G" />
             <ComboBoxItem Content="B" />
-            <ComboBoxItem Content="色相" />
-            <ComboBoxItem Content="HSL纯度" />
-            <ComboBoxItem Content="HSL亮度" />
-            <ComboBoxItem Content="HSV纯度" />
-            <ComboBoxItem Content="HSV亮度" />
             <ComboBoxItem Content="HSI纯度" />
-            <ComboBoxItem Content="HSI亮度" />
+            <ComboBoxItem Content="HSL纯度" />
+            <ComboBoxItem Content="HSV纯度" />
+            <ComboBoxItem Content="色相" />
         </ComboBox>
         <Label
             Grid.Row ="1"
