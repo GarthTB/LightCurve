@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <StartupObject>LightCurve.App</StartupObject>
+    <Title>LightCurve</Title>
+    <PackageId>LightCurve</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>GarthTB</Authors>
+    <Company>GarthTB</Company>
+    <Product>LightCurve</Product>
+    <PackageIcon>icon.png</PackageIcon>
+    <ApplicationIcon>Icons\favicon.ico</ApplicationIcon>
+    <Copyright>Copyright © 2024 GarthTB. All rights reserved.</Copyright>
+    <Description>一个Windows小工具，用于生成一组图片特定区域像素值的变化曲线。</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Icons\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
