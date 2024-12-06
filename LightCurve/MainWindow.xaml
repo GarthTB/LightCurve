@@ -22,11 +22,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="12" />
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="8*" />
+            <ColumnDefinition Width="6*" />
             <ColumnDefinition Width="12" />
         </Grid.ColumnDefinitions>
         <ListBox
@@ -116,65 +116,14 @@
             VerticalAlignment="Top"
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            Content="输出结果" />
-        <ComboBox
-            x:Name="CBOutputType"
-            Grid.Row ="1"
-            Grid.Column ="5"
-            Height="28"
-            Margin="4,37,0,0"
-            VerticalAlignment="Top"
-            VerticalContentAlignment="Center"
-            SelectedIndex="0">
-            <ComboBoxItem Content="txt列表" />
-            <ComboBoxItem Content="png折线" />
-            <ComboBoxItem Content="列表和折线" />
-        </ComboBox>
-        <Label
-            Grid.Row ="1"
-            Grid.Column ="4"
-            Height="30"
-            Margin="0,72,0,0"
-            VerticalAlignment="Top"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            Content="输出位置" />
-        <Button
-            x:Name="BtSelOutputPath"
-            Grid.Row ="1"
-            Grid.Column ="5"
-            Height="28"
-            Margin="4,73,0,0"
-            VerticalAlignment="Top"
-            Background="#FFE0E0E0"
-            BorderBrush="#FFA0A0A0"
-            Click="BtSelOutputPath_Click"
-            Content="选择位置" />
-        <TextBox
-            x:Name="TBOutputPath"
-            Grid.Row ="1"
-            Grid.Column ="4"
-            Grid.ColumnSpan="2"
-            Margin="8,109,0,108"
-            IsReadOnly="True"
-            TextChanged="TBOutputPath_TextChanged"
-            TextWrapping="Wrap" />
-        <Label
-            Grid.Row ="1"
-            Grid.Column ="4"
-            Height="30"
-            Margin="0,0,0,71"
-            VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
             Content="被测区域" />
         <ComboBox
             x:Name="CBRange"
             Grid.Row ="1"
             Grid.Column ="5"
             Height="28"
-            Margin="4,0,0,72"
-            VerticalAlignment="Bottom"
+            Margin="4,37,0,0"
+            VerticalAlignment="Top"
             VerticalContentAlignment="Center"
             SelectedIndex="0"
             SelectionChanged="CBRange_SelectionChanged">
@@ -186,8 +135,8 @@
             Grid.Column ="4"
             Grid.ColumnSpan="2"
             Height="64"
-            Margin="8,0,0,0"
-            VerticalAlignment="Bottom">
+            Margin="8,73,0,0"
+            VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="8" />
@@ -239,6 +188,57 @@
                 Text="1"
                 TextChanged="TBRangeH_TextChanged" />
         </Grid>
+        <Label
+            Grid.Row ="1"
+            Grid.Column ="4"
+            Height="30"
+            Margin="0,144,0,0"
+            VerticalAlignment="Top"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="输出结果" />
+        <ComboBox
+            x:Name="CBOutputType"
+            Grid.Row ="1"
+            Grid.Column ="5"
+            Height="28"
+            Margin="4,145,0,0"
+            VerticalAlignment="Top"
+            VerticalContentAlignment="Center"
+            SelectedIndex="0">
+            <ComboBoxItem Content="txt列表" />
+            <ComboBoxItem Content="png折线" />
+            <ComboBoxItem Content="列表和折线" />
+        </ComboBox>
+        <Label
+            Grid.Row ="1"
+            Grid.Column ="4"
+            Height="30"
+            Margin="0,180,0,0"
+            VerticalAlignment="Top"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Content="输出位置" />
+        <Button
+            x:Name="BtSelOutputPath"
+            Grid.Row ="1"
+            Grid.Column ="5"
+            Height="28"
+            Margin="4,181,0,0"
+            VerticalAlignment="Top"
+            Background="#FFE0E0E0"
+            BorderBrush="#FFA0A0A0"
+            Click="BtSelOutputPath_Click"
+            Content="选择位置" />
+        <TextBox
+            x:Name="TBOutputPath"
+            Grid.Row ="1"
+            Grid.Column ="4"
+            Grid.ColumnSpan="2"
+            Margin="8,217,0,0"
+            IsReadOnly="True"
+            TextChanged="TBOutputPath_TextChanged"
+            TextWrapping="Wrap" />
         <Button
             x:Name="BtRun"
             Grid.Row ="3"

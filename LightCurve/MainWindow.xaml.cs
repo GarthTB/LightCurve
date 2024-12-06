@@ -78,6 +78,8 @@ namespace LightCurve
 
         private void BtAddPaths_Click(object sender, RoutedEventArgs e)
         {
+            var fileNames = Core.Tools.File.PickInputs();
+            if (fileNames.Length == 0) return;
 
         }
 
@@ -91,10 +93,16 @@ namespace LightCurve
         #region 排序文件
 
         private void CBOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            => ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+        {
+            if (CBDescending is not null)
+                ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+        }
 
         private void CBDescending_Checked(object sender, RoutedEventArgs e)
-            => ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+        {
+            if (CBOrder is not null)
+                ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+        }
 
         private void ReOrderPaths(int orderIndex, bool descending)
         {
