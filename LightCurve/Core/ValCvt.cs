@@ -2,15 +2,11 @@
 
 namespace LightCurve.Core
 {
-    internal static class ValueCvt
+    internal static class ValCvt
     {
         /// <summary> 获取单色图像指定通道的均值 </summary>
         internal static double MeanValue1(Mat image, int channel)
-        => channel switch
-        {
-            >= 0 and <= 6 => image.Mean().Val0,
-            _ => 0,
-        };
+            => channel is >= 0 and <= 6 ? image.Mean().Val0 : 0;
 
         /// <summary> 获取3通道图像指定通道的均值 </summary>
         internal static double MeanValue3(Mat image, int channel)

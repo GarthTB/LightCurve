@@ -184,7 +184,7 @@ namespace LightCurve
         {
             if (mode == 1) // 图片
             {
-                Core.ImageAnalyzer analyzer = CBFullFrame.IsChecked == true
+                Core.ImgAna analyzer = CBFullFrame.IsChecked == true
                     ? new(files,
                         CBChannel.SelectedIndex,
                         null,
@@ -205,7 +205,7 @@ namespace LightCurve
             }
             if (mode == 2) // 视频
             {
-                Core.VideoAnalyzer analyzer = CBFullFrame.IsChecked == true
+                Core.VidAna analyzer = CBFullFrame.IsChecked == true
                     ? new(files,
                         CBChannel.SelectedIndex,
                         null,

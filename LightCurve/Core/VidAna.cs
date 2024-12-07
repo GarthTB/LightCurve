@@ -2,7 +2,7 @@
 
 namespace LightCurve.Core
 {
-    internal class VideoAnalyzer(
+    internal class VidAna(
         List<FileInfo> files,
         int channel,
         uint? x,

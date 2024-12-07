@@ -23,3 +23,4 @@
 ## Credits
 
 - [OpenCvSharp](https://github.com/shimat/opencvsharp)
+- [ScottPlot](https://github.com/ScottPlot/ScottPlot)

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LightCurve.Core
 {
-    internal class ImageAnalyzer(
+    internal class ImgAna(
         List<FileInfo> files,
         int channel,
         uint? x,
@@ -45,9 +45,9 @@ namespace LightCurve.Core
         private static double GetValue(Mat range, int channel)
         => range.Channels() switch
         {
-            1 => ValueCvt.MeanValue1(range, channel), // 单色图
-            3 => ValueCvt.MeanValue3(range, channel), // 彩色图
-            4 => ValueCvt.MeanValue4(range, channel), // 含透明度的彩色图
+            1 => ValCvt.MeanValue1(range, channel), // 单色图
+            3 => ValCvt.MeanValue3(range, channel), // 彩色图
+            4 => ValCvt.MeanValue4(range, channel), // 含透明度的彩色图
             _ => throw new ArgumentException("不支持的通道数量"),
         };
 
