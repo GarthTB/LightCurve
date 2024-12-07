@@ -173,5 +173,14 @@ namespace LightCurve
         }
 
         #endregion
+
+        #region 开始分析
+
+        private void BtRun_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }
