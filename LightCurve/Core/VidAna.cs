@@ -21,7 +21,7 @@ namespace LightCurve.Core
             {
                 try
                 {
-                    using var vid = new VideoCapture(file.FullName);
+                    using VideoCapture vid = new(file.FullName);
                     var values = new double[vid.FrameCount];
 
                     Mat frame = new(), roi = new();
@@ -33,19 +33,7 @@ namespace LightCurve.Core
 
                     var outName = Tools.File.GenOutName([file]);
                     outName = ValCvt.AppendSuff(outName, channel);
-                    switch (outputType)
-                    {
-                        case 0:
-                            Tools.File.OutputTxt(values, outputDir, outName);
-                            break;
-                        case 1:
-                            Tools.File.OutputPlot(values, outputDir, outName);
-                            break;
-                        default:
-                            Tools.File.OutputTxt(values, outputDir, outName);
-                            Tools.File.OutputPlot(values, outputDir, outName);
-                            break;
-                    }
+                    Tools.File.OutputValues(outputType, values, outputDir, outName);
                 }
                 catch (Exception e)
                 {

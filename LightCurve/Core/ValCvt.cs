@@ -7,7 +7,7 @@ namespace LightCurve.Core
     {
         /// <summary> 获取单色图像指定通道的均值 </summary>
         internal static double MeanValue1(Mat image, int channel)
-            => channel is >= 0 and <= 6 ? image.Mean().Val0 : 0;
+            => channel is >= 0 and <= 6 ? Cv2.Mean(image).Val0 : 0;
 
         /// <summary> 获取3通道图像指定通道的均值 </summary>
         internal static double MeanValue3(Mat image, int channel)
@@ -50,48 +50,33 @@ namespace LightCurve.Core
             _ => name,
         };
 
-        /// <summary> 获取Mat图允许的最大值 </summary>
-        private static double Normalize(double value, int depth)
-        => depth switch
+        /// <summary> 获取单通道图像归一化后的均值 </summary>
+        private static double NormalizedMean(Mat image)
+        => image.Depth() switch
         {
-            MatType.CV_8U => value / 255.0,
-            MatType.CV_16U => value / 65535.0,
-            MatType.CV_32F or MatType.CV_64F => value, // 浮点图已经归一化
+            MatType.CV_8U => Mean(image) / 255.0,
+            MatType.CV_16U => Mean(image) / 65535.0,
+            MatType.CV_32F or MatType.CV_64F => Mean(image), // 浮点图已经归一化
             _ => throw new ArgumentException("不支持的位深度！")
         };
 
+        /// <summary> 单通道图像的均值 </summary>
+        private static double Mean(Mat image) => Cv2.Mean(image).Val0;
+
         /// <summary> 提取R通道的均值 </summary>
-        private static double MeanR(Mat image)
-        {
-            var r = Cv2.Split(image)[2];
-            var mean = Cv2.Mean(r).Val0;
-            return Normalize(mean, image.Depth());
-        }
+        private static double MeanR(Mat image) => NormalizedMean(Cv2.Split(image)[2]);
 
         /// <summary> 提取G通道的均值 </summary>
-        private static double MeanG(Mat image)
-        {
-            var g = Cv2.Split(image)[1];
-            var mean = Cv2.Mean(g).Val0;
-            return Normalize(mean, image.Depth());
-        }
+        private static double MeanG(Mat image) => NormalizedMean(Cv2.Split(image)[1]);
 
         /// <summary> 提取B通道的均值 </summary>
-        private static double MeanB(Mat image)
-        {
-            var b = Cv2.Split(image)[0];
-            var mean = Cv2.Mean(b).Val0;
-            return Normalize(mean, image.Depth());
-        }
+        private static double MeanB(Mat image) => NormalizedMean(Cv2.Split(image)[0]);
 
         /// <summary> 提取CIEL通道的均值 </summary>
         private static double MeanCIEL(Mat image)
         {
-            using Mat labImage = new();
-            Cv2.CvtColor(image, labImage, ColorConversionCodes.BGR2Lab);
-            var l = Cv2.Split(labImage)[0];
-            var mean = Cv2.Mean(l).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat labImage = image.CvtColor(ColorConversionCodes.BGR2Lab);
+            return NormalizedMean(Cv2.Split(labImage)[0]);
         }
 
         /// <summary> 提取I通道的均值 </summary>
@@ -101,51 +86,36 @@ namespace LightCurve.Core
         /// <summary> 提取L通道的均值 </summary>
         private static double MeanL(Mat image)
         {
-            using Mat hlsImage = new();
-            Cv2.CvtColor(image, hlsImage, ColorConversionCodes.BGR2HLS);
-            var l = Cv2.Split(hlsImage)[1];
-            var mean = Cv2.Mean(l).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat hlsImage = image.CvtColor(ColorConversionCodes.BGR2HLS);
+            return NormalizedMean(Cv2.Split(hlsImage)[1]);
         }
 
         /// <summary> 提取V通道的均值 </summary>
         private static double MeanV(Mat image)
         {
-            using Mat hsvImage = new();
-            Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
-            var v = Cv2.Split(hsvImage)[2];
-            var mean = Cv2.Mean(v).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
+            return NormalizedMean(Cv2.Split(hsvImage)[2]);
         }
 
         /// <summary> 提取Sl通道的均值 </summary>
         private static double MeanSl(Mat image)
         {
-            using Mat hlsImage = new();
-            Cv2.CvtColor(image, hlsImage, ColorConversionCodes.BGR2HLS);
-            var s = Cv2.Split(hlsImage)[2];
-            var mean = Cv2.Mean(s).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat hlsImage = image.CvtColor(ColorConversionCodes.BGR2HLS);
+            return NormalizedMean(Cv2.Split(hlsImage)[2]);
         }
 
         /// <summary> 提取Sv通道的均值 </summary>
         private static double MeanSv(Mat image)
         {
-            using Mat hsvImage = new();
-            Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
-            var s = Cv2.Split(hsvImage)[1];
-            var mean = Cv2.Mean(s).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
+            return NormalizedMean(Cv2.Split(hsvImage)[1]);
         }
 
         /// <summary> 提取H通道的均值 </summary>
         private static double MeanH(Mat image)
         {
-            using Mat hsvImage = new();
-            Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
-            var h = Cv2.Split(hsvImage)[0];
-            var mean = Cv2.Mean(h).Val0;
-            return Normalize(mean, image.Depth());
+            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
+            return NormalizedMean(Cv2.Split(hsvImage)[0]);
         }
     }
 }

@@ -137,10 +137,13 @@ namespace LightCurve
             paths = files.Select(x => x.FullName).ToList();
             LBPaths.ItemsSource = paths;
             if (files.Count == 0)
+            {
+                mode = 0;
                 BtRemovePaths.IsEnabled =
                 BtRun.IsEnabled =
                 CBOrder.IsEnabled =
                 CBDescending.IsEnabled = false;
+            }
         }
 
         #endregion
@@ -177,7 +180,6 @@ namespace LightCurve
             files = [.. descending
                 ? files.OrderByDescending(judge)
                 : files.OrderBy(judge)];
-
             paths = files.Select(x => x.FullName).ToList();
             LBPaths.ItemsSource = paths;
         }

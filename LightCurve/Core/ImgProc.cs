@@ -14,7 +14,7 @@ namespace LightCurve.Core
                 return image; // 直接返回全帧
             if (x + w > image.Cols || y + h > image.Rows)
                 throw new ArgumentException("选区超出图像范围");
-            Rect roi = new((int)x, (int)y, (int)w, (int)h);
+            Rect roi = new((int)x, (int)y, (int)w, (int)h); // 若无法转换，应该会在上一步筛掉
             return new Mat(image, roi);
         }
 

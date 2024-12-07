@@ -22,26 +22,14 @@ namespace LightCurve.Core
                 var values = new double[files.Count];
                 _ = Parallel.For(0, values.Length, i =>
                 {
-                    using var image = Cv2.ImRead(files[i].FullName);
-                    using var roi = ImgProc.GetROI(image, x, y, w, h);
+                    using Mat image = Cv2.ImRead(files[i].FullName);
+                    using Mat roi = ImgProc.GetROI(image, x, y, w, h);
                     values[i] = ImgProc.GetValue(roi, channel);
                 });
 
                 var outName = Tools.File.GenOutName(files);
                 outName = ValCvt.AppendSuff(outName, channel);
-                switch (outputType)
-                {
-                    case 0:
-                        Tools.File.OutputTxt(values, outputDir, outName);
-                        break;
-                    case 1:
-                        Tools.File.OutputPlot(values, outputDir, outName);
-                        break;
-                    default:
-                        Tools.File.OutputTxt(values, outputDir, outName);
-                        Tools.File.OutputPlot(values, outputDir, outName);
-                        break;
-                }
+                Tools.File.OutputValues(outputType, values, outputDir, outName);
 
                 Tools.MsgB.OkInfo("分析完成", "提示");
             }

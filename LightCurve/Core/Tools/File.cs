@@ -17,7 +17,7 @@ namespace LightCurve.Core.Tools
                 FileName = "临时文件名，最后会根据原文件名修改",
                 Filter = typeIndex switch
                 {
-                    1 => "png图片文件(*.png)|*.png",
+                    0 => "png图片文件(*.png)|*.png",
                     _ => "txt文本文件(*.txt)|*.txt",
                 },
             };
@@ -87,8 +87,26 @@ namespace LightCurve.Core.Tools
             return path;
         }
 
+        /// <summary> 将结果输出到指定路径 </summary>
+        internal static void OutputValues(int outputType, double[] values, string outputDir, string outName)
+        {
+            switch (outputType)
+            {
+                case 0:
+                    OutputPlot(values, outputDir, outName);
+                    break;
+                case 1:
+                    OutputTxt(values, outputDir, outName);
+                    break;
+                default:
+                    OutputPlot(values, outputDir, outName);
+                    OutputTxt(values, outputDir, outName);
+                    break;
+            }
+        }
+
         /// <summary> 将结果列表输出到指定路径 </summary>
-        internal static void OutputTxt(double[] values, string dir, string name)
+        private static void OutputTxt(double[] values, string dir, string name)
         {
             var path = DistinctPath(dir, name, "txt");
 
@@ -101,7 +119,7 @@ namespace LightCurve.Core.Tools
         }
 
         /// <summary> 将结果折线图输出到指定路径 </summary>
-        internal static void OutputPlot(double[] values, string dir, string name)
+        private static void OutputPlot(double[] values, string dir, string name)
         {
             var path = DistinctPath(dir, name, "png");
 
@@ -111,10 +129,17 @@ namespace LightCurve.Core.Tools
             plot.XLabel("Frame Number");
             plot.YLabel("Value");
             plot.ScaleFactor = 2;
-            plot.Axes.SetLimits(1, indexes[^1], 0, 1);
+            if (values.Length > 1)
+                plot.Axes.SetLimits(1, indexes[^1], 0, 1);
             plot.Axes.AntiAlias(true);
+            var plotWidth = values.Length switch
+            {
+                <= 80 => 800,
+                >= 480 => 4800,
+                _ => values.Length * 10,
+            };
 
-            _ = plot.SavePng(path, 3240, 2000);
+            _ = plot.SavePng(path, plotWidth, 2000);
         }
     }
 }

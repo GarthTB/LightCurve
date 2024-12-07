@@ -216,8 +216,8 @@
             VerticalAlignment="Top"
             VerticalContentAlignment="Center"
             SelectedIndex="0">
-            <ComboBoxItem Content="txt列表" />
             <ComboBoxItem Content="png折线" />
+            <ComboBoxItem Content="txt列表" />
             <ComboBoxItem Content="列表和折线" />
         </ComboBox>
         <Label
