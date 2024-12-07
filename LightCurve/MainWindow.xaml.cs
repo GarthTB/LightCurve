@@ -10,7 +10,10 @@ namespace LightCurve
     {
         #region 加载、绑定和帮助
 
+        /// <summary> 待处理的所有文件 </summary>
         private List<FileInfo> files = [];
+
+        /// <summary> 在窗口上显示的待处理文件名 </summary>
         private List<string> paths = [];
 
         /// <summary> 0为无效，1为照片，2为视频 </summary>
@@ -115,6 +118,9 @@ namespace LightCurve
             {
                 files.AddRange(fileNames.Select(fileName => new FileInfo(fileName)));
                 ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+
+                if (TBOutputDir.Text.Length == 0)
+                    TBOutputDir.Text = files[0].DirectoryName ?? "";
 
                 CBOrder.IsEnabled = CBDescending.IsEnabled = true;
                 BtRun.IsEnabled = TBOutputDir.Text.Length > 0;

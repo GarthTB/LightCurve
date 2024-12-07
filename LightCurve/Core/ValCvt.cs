@@ -2,6 +2,7 @@
 
 namespace LightCurve.Core
 {
+    /// <summary> 颜色通道转换器 </summary>
     internal static class ValCvt
     {
         /// <summary> 获取单色图像指定通道的均值 </summary>
@@ -86,7 +87,7 @@ namespace LightCurve.Core
         /// <summary> 提取CIEL通道的均值 </summary>
         private static double MeanCIEL(Mat image)
         {
-            Mat labImage = new();
+            using Mat labImage = new();
             Cv2.CvtColor(image, labImage, ColorConversionCodes.BGR2Lab);
             var l = Cv2.Split(labImage)[0];
             var mean = Cv2.Mean(l).Val0;
@@ -100,7 +101,7 @@ namespace LightCurve.Core
         /// <summary> 提取L通道的均值 </summary>
         private static double MeanL(Mat image)
         {
-            Mat hlsImage = new();
+            using Mat hlsImage = new();
             Cv2.CvtColor(image, hlsImage, ColorConversionCodes.BGR2HLS);
             var l = Cv2.Split(hlsImage)[1];
             var mean = Cv2.Mean(l).Val0;
@@ -110,7 +111,7 @@ namespace LightCurve.Core
         /// <summary> 提取V通道的均值 </summary>
         private static double MeanV(Mat image)
         {
-            Mat hsvImage = new();
+            using Mat hsvImage = new();
             Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
             var v = Cv2.Split(hsvImage)[2];
             var mean = Cv2.Mean(v).Val0;
@@ -120,7 +121,7 @@ namespace LightCurve.Core
         /// <summary> 提取Sl通道的均值 </summary>
         private static double MeanSl(Mat image)
         {
-            Mat hlsImage = new();
+            using Mat hlsImage = new();
             Cv2.CvtColor(image, hlsImage, ColorConversionCodes.BGR2HLS);
             var s = Cv2.Split(hlsImage)[2];
             var mean = Cv2.Mean(s).Val0;
@@ -130,7 +131,7 @@ namespace LightCurve.Core
         /// <summary> 提取Sv通道的均值 </summary>
         private static double MeanSv(Mat image)
         {
-            Mat hsvImage = new();
+            using Mat hsvImage = new();
             Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
             var s = Cv2.Split(hsvImage)[1];
             var mean = Cv2.Mean(s).Val0;
@@ -140,7 +141,7 @@ namespace LightCurve.Core
         /// <summary> 提取H通道的均值 </summary>
         private static double MeanH(Mat image)
         {
-            Mat hsvImage = new();
+            using Mat hsvImage = new();
             Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
             var h = Cv2.Split(hsvImage)[0];
             var mean = Cv2.Mean(h).Val0;

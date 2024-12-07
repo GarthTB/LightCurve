@@ -21,9 +21,8 @@ namespace LightCurve.Core.Tools
                     _ => "txt文本文件(*.txt)|*.txt",
                 },
             };
-            if (dialog.ShowDialog() == false) return "";
-            var dir = Path.GetDirectoryName(dialog.FileName);
-            return string.IsNullOrEmpty(dir) ? "" : dir;
+            return dialog.ShowDialog() == true
+                ? Path.GetDirectoryName(dialog.FileName) ?? "" : "";
         }
 
         /// <summary> 选择多个待处理的文件 </summary>
