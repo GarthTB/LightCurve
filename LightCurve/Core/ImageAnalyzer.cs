@@ -43,62 +43,13 @@ namespace LightCurve.Core
 
         /// <summary> 计算一块ROI中指定指标的均值 </summary>
         private static double GetValue(Mat range, int channel)
+        => range.Channels() switch
         {
-            if (range.Channels() == 1) // 灰度图
-                return range.Mean().Val0;
-            if (range.Channels() != 3) // 无效图
-                throw new ArgumentException("不支持的图像通道数量");
-
-            var values = ConvertPixels();
-            return values.Average();
-
-            List<double> ConvertPixels()
-            {
-                int depth = range.Depth();
-                double Normalize(double value) => depth switch
-                {
-                    MatType.CV_8U => value / 255.0,
-                    MatType.CV_16U => value / 65535.0,
-                    MatType.CV_32F => value,
-                    _ => throw new NotSupportedException("不支持的图像位深")
-                };
-
-                List<double> values = new(range.Cols * range.Rows);
-                if (depth == MatType.CV_8U)
-                    for (int row = 0; row < range.Rows; row++)
-                        for (int col = 0; col < range.Cols; col++)
-                        {
-                            var px = range.At<Vec3b>(row, col);
-                            var b = Normalize(px.Item0);
-                            var g = Normalize(px.Item1);
-                            var r = Normalize(px.Item2);
-                            values.Add(RGBConverter.Convert(r, g, b, channel));
-                        }
-                else if (depth == MatType.CV_16U)
-                    for (int row = 0; row < range.Rows; row++)
-                        for (int col = 0; col < range.Cols; col++)
-                        {
-                            var px = range.At<Vec3w>(row, col);
-                            var b = Normalize(px.Item0);
-                            var g = Normalize(px.Item1);
-                            var r = Normalize(px.Item2);
-                            values.Add(RGBConverter.Convert(r, g, b, channel));
-                        }
-                else if (depth == MatType.CV_32F)
-                    for (int row = 0; row < range.Rows; row++)
-                        for (int col = 0; col < range.Cols; col++)
-                        {
-                            var px = range.At<Vec3f>(row, col);
-                            var b = Normalize(px.Item0);
-                            var g = Normalize(px.Item1);
-                            var r = Normalize(px.Item2);
-                            values.Add(RGBConverter.Convert(r, g, b, channel));
-                        }
-                else throw new NotSupportedException("不支持的图像位深");
-
-                return values;
-            }
-        }
+            1 => ValueCvt.MeanValue1(range, channel), // 单色图
+            3 => ValueCvt.MeanValue3(range, channel), // 彩色图
+            4 => ValueCvt.MeanValue4(range, channel), // 含透明度的彩色图
+            _ => throw new ArgumentException("不支持的通道数量"),
+        };
 
         /// <summary> 将结果输出到指定路径 </summary>
         private static void Output(double[] values, string path, int Type)

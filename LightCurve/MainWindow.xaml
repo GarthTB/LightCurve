@@ -101,16 +101,16 @@
             VerticalContentAlignment="Center"
             SelectedIndex="0"
             ToolTip="所有指标都将归一化">
-            <ComboBoxItem Content="HSI亮度" />
-            <ComboBoxItem Content="HSL亮度" />
-            <ComboBoxItem Content="HSV亮度" />
+            <ComboBoxItem Content="Lab明度" />
+            <ComboBoxItem Content="HSI明度" />
+            <ComboBoxItem Content="HSL明度" />
+            <ComboBoxItem Content="HSV明度" />
             <ComboBoxItem Content="R" />
             <ComboBoxItem Content="G" />
             <ComboBoxItem Content="B" />
-            <ComboBoxItem Content="HSI纯度" />
             <ComboBoxItem Content="HSL纯度" />
             <ComboBoxItem Content="HSV纯度" />
-            <ComboBoxItem Content="色相" />
+            <ComboBoxItem Content="HSV色相" />
         </ComboBox>
         <Label
             Grid.Row ="1"
