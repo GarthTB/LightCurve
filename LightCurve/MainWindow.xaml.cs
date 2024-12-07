@@ -28,7 +28,11 @@ namespace LightCurve
 
         #region 选区
 
-        private void CBRange_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CBFullFrame_Checked(object sender, RoutedEventArgs e) => RefreshRange();
+
+        private void CBFullFrame_Unchecked(object sender, RoutedEventArgs e) => RefreshRange();
+
+        private void RefreshRange()
         {
             if (TBRangeX is null
                 || TBRangeY is null
@@ -39,7 +43,7 @@ namespace LightCurve
             TBRangeX.IsEnabled =
             TBRangeY.IsEnabled =
             TBRangeW.IsEnabled =
-            TBRangeH.IsEnabled = CBRange.SelectedIndex == 1;
+            TBRangeH.IsEnabled = CBFullFrame.IsChecked == false;
         }
 
         private void TBRangeX_TextChanged(object sender, TextChangedEventArgs e)
@@ -178,7 +182,48 @@ namespace LightCurve
 
         private void BtRun_Click(object sender, RoutedEventArgs e)
         {
-
+            if (mode == 1) // 图片
+            {
+                Core.ImageAnalyzer analyzer = CBFullFrame.IsChecked == true
+                    ? new(files,
+                        CBChannel.SelectedIndex,
+                        null,
+                        null,
+                        null,
+                        null,
+                        CBOutputType.SelectedIndex,
+                        TBOutputPath.Text)
+                    : new(files,
+                        CBChannel.SelectedIndex,
+                        uint.Parse(TBRangeX.Text),
+                        uint.Parse(TBRangeY.Text),
+                        uint.Parse(TBRangeW.Text),
+                        uint.Parse(TBRangeH.Text),
+                        CBOutputType.SelectedIndex,
+                        TBOutputPath.Text);
+                analyzer.Run();
+            }
+            if (mode == 2) // 视频
+            {
+                Core.VideoAnalyzer analyzer = CBFullFrame.IsChecked == true
+                    ? new(files,
+                        CBChannel.SelectedIndex,
+                        null,
+                        null,
+                        null,
+                        null,
+                        CBOutputType.SelectedIndex,
+                        TBOutputPath.Text)
+                    : new(files,
+                        CBChannel.SelectedIndex,
+                        uint.Parse(TBRangeX.Text),
+                        uint.Parse(TBRangeY.Text),
+                        uint.Parse(TBRangeW.Text),
+                        uint.Parse(TBRangeH.Text),
+                        CBOutputType.SelectedIndex,
+                        TBOutputPath.Text);
+                analyzer.Run();
+            }
         }
 
         #endregion

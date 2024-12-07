@@ -121,19 +121,21 @@
             HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
             Content="被测区域" />
-        <ComboBox
-            x:Name="CBRange"
+        <CheckBox
+            x:Name="CBFullFrame"
             Grid.Row ="1"
             Grid.Column ="5"
-            Height="28"
-            Margin="4,37,0,0"
+            Height="30"
+            Margin="0,36,10,0"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
+            HorizontalContentAlignment="Center"
             VerticalContentAlignment="Center"
-            SelectedIndex="0"
-            SelectionChanged="CBRange_SelectionChanged">
-            <ComboBoxItem Content="整个画面" />
-            <ComboBoxItem Content="选定区域" />
-        </ComboBox>
+            Checked="CBFullFrame_Checked"
+            Content="整个画面"
+            IsChecked="True"
+            Padding="12,-1,0,0"
+            Unchecked="CBFullFrame_Unchecked" />
         <Grid
             Grid.Row ="1"
             Grid.Column ="4"

@@ -1,6 +1,20 @@
-﻿namespace LightCurve.Core
+﻿using System.IO;
+
+namespace LightCurve.Core
 {
-    internal class VideoAnalyzer
+    internal class VideoAnalyzer(
+        List<FileInfo> files,
+        int channel,
+        uint? x,
+        uint? y,
+        uint? w,
+        uint? h,
+        int outputType,
+        string outputPath)
     {
+        internal void Run()
+        {
+
+        }
     }
 }
