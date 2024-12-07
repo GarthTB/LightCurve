@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using OpenCvSharp;
 using System.IO;
 
 namespace LightCurve.Core.Tools
@@ -33,6 +34,40 @@ namespace LightCurve.Core.Tools
                 Multiselect = true,
             };
             return ofd.ShowDialog() == true ? ofd.FileNames : [];
+        }
+
+        /// <summary> 判断文件是否全为图片 </summary>
+        internal static bool IsImages(string[] path) => path.All(IsImage);
+
+        /// <summary> 判断文件是否为图片 </summary>
+        private static bool IsImage(string path)
+        {
+            try
+            {
+                using var image = Cv2.ImRead(path);
+                return !image.Empty();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary> 判断文件是否全为视频 </summary>
+        internal static bool IsVideos(string[] path) => path.All(IsVideo);
+
+        /// <summary> 判断文件是否为视频 </summary>
+        private static bool IsVideo(string path)
+        {
+            try
+            {
+                using var videoCapture = new VideoCapture(path);
+                return videoCapture.IsOpened();
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

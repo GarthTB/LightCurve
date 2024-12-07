@@ -11,6 +11,10 @@ namespace LightCurve
         #region 加载、绑定和帮助
 
         private List<FileInfo> files = [];
+        private List<string> paths = [];
+
+        /// <summary> 0为无效，1为照片，2为视频 </summary>
+        private byte mode = 0;
 
         public MainWindow() => InitializeComponent();
 
@@ -70,7 +74,7 @@ namespace LightCurve
             => TBOutputPath.Text = Core.Tools.File.SelectOutputDir(CBOutputType.SelectedIndex);
 
         private void TBOutputPath_TextChanged(object sender, TextChangedEventArgs e)
-            => BtRun.IsEnabled = BtRemovePaths.IsEnabled && TBOutputPath.Text.Length > 0;
+            => BtRun.IsEnabled = files.Count > 0 && TBOutputPath.Text.Length > 0;
 
         #endregion
 
@@ -81,11 +85,52 @@ namespace LightCurve
             var fileNames = Core.Tools.File.PickInputs();
             if (fileNames.Length == 0) return;
 
+            if (Core.Tools.File.IsImages(fileNames))
+            {
+                if (mode == 2)
+                    Core.Tools.MsgB.OkInfo("添加的文件与原先的类型不一致，未添加！", "提示");
+                else
+                {
+                    if (mode == 0) mode = 1;
+                    LoadAndActivate(fileNames);
+                }
+            }
+            else if (Core.Tools.File.IsVideos(fileNames))
+            {
+                if (mode == 1)
+                    Core.Tools.MsgB.OkInfo("添加的文件与原先的类型不一致，未添加！", "提示");
+                else
+                {
+                    if (mode == 0) mode = 2;
+                    LoadAndActivate(fileNames);
+                }
+            }
+            else Core.Tools.MsgB.OkErr("添加的文件不全为图片也不全为视频，未添加！", "错误");
+
+            void LoadAndActivate(string[] fileNames)
+            {
+                files.AddRange(fileNames.Select(fileName => new FileInfo(fileName)));
+                ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+
+                CBOrder.IsEnabled = CBDescending.IsEnabled = true;
+                BtRun.IsEnabled = TBOutputPath.Text.Length > 0;
+            }
         }
+
+        private void LBPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            => BtRemovePaths.IsEnabled = LBPaths.SelectedItems.Count > 0;
 
         private void BtRemovePaths_Click(object sender, RoutedEventArgs e)
         {
-
+            var sel_paths = LBPaths.SelectedItems.Cast<string>().ToArray();
+            _ = files.RemoveAll(x => sel_paths.Contains(x.FullName));
+            paths = files.Select(x => x.FullName).ToList();
+            LBPaths.ItemsSource = paths;
+            if (files.Count == 0)
+                BtRemovePaths.IsEnabled =
+                BtRun.IsEnabled =
+                CBOrder.IsEnabled =
+                CBDescending.IsEnabled = false;
         }
 
         #endregion
@@ -95,16 +140,22 @@ namespace LightCurve
         private void CBOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CBDescending is not null)
-                ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+                ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
         }
 
         private void CBDescending_Checked(object sender, RoutedEventArgs e)
         {
             if (CBOrder is not null)
-                ReOrderPaths(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+                ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
         }
 
-        private void ReOrderPaths(int orderIndex, bool descending)
+        private void CBDescending_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (CBOrder is not null)
+                ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
+        }
+
+        private void ReOrderFiles(int orderIndex, bool descending)
         {
             Func<FileInfo, object> judge = orderIndex switch
             {
@@ -116,6 +167,9 @@ namespace LightCurve
             files = [.. descending
                 ? files.OrderByDescending(judge)
                 : files.OrderBy(judge)];
+
+            paths = files.Select(x => x.FullName).ToList();
+            LBPaths.ItemsSource = paths;
         }
 
         #endregion
