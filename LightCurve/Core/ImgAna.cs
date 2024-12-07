@@ -17,19 +17,29 @@ namespace LightCurve.Core
         {
             try
             {
-                var ranges = files.Select(file => GetROI(file, x, y, w, h)).ToArray();
-                var values = ranges.Select(range => GetValue(range, channel)).ToArray();
+                double[] values = new double[files.Count];
+                _ = Parallel.For(0, values.Length, i =>
+                {
+                    var range = GetROI(files[i], x, y, w, h);
+                    values[i] = GetValue(range, channel);
+                });
+
                 var outName = Tools.File.GenOutName(files);
                 outName = ValCvt.AppendSuff(outName, channel);
-                if (outputType == 0)
-                    Tools.File.OutputTxt(values, outputDir, outName);
-                else if (outputType == 1)
-                    Tools.File.OutputPlot(values, outputDir, outName);
-                else
+                switch (outputType)
                 {
-                    Tools.File.OutputTxt(values, outputDir, outName);
-                    Tools.File.OutputPlot(values, outputDir, outName);
+                    case 0:
+                        Tools.File.OutputTxt(values, outputDir, outName);
+                        break;
+                    case 1:
+                        Tools.File.OutputPlot(values, outputDir, outName);
+                        break;
+                    default:
+                        Tools.File.OutputTxt(values, outputDir, outName);
+                        Tools.File.OutputPlot(values, outputDir, outName);
+                        break;
                 }
+
                 Tools.MsgB.OkInfo("分析完成", "提示");
             }
             catch (Exception e)

@@ -38,7 +38,8 @@ namespace LightCurve.Core.Tools
         }
 
         /// <summary> 判断文件是否全为图片 </summary>
-        internal static bool IsImages(string[] path) => path.All(IsImage);
+        internal static bool IsImages(string[] path)
+            => path.AsParallel().All(IsImage);
 
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
@@ -55,7 +56,8 @@ namespace LightCurve.Core.Tools
         }
 
         /// <summary> 判断文件是否全为视频 </summary>
-        internal static bool IsVideos(string[] path) => path.All(IsVideo);
+        internal static bool IsVideos(string[] path)
+            => path.AsParallel().All(IsVideo);
 
         /// <summary> 判断文件是否为视频 </summary>
         private static bool IsVideo(string path)
@@ -113,7 +115,7 @@ namespace LightCurve.Core.Tools
             plot.Axes.SetLimits(1, indexes[^1], 0, 1);
             plot.Axes.AntiAlias(true);
 
-            _ = plot.SavePng(path, 3000, 2000);
+            _ = plot.SavePng(path, 3240, 2000);
         }
     }
 }
