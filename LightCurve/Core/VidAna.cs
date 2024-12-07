@@ -10,7 +10,7 @@ namespace LightCurve.Core
         uint? w,
         uint? h,
         int outputType,
-        string outputPath)
+        string outputDir)
     {
         internal void Run()
         {

@@ -74,11 +74,11 @@ namespace LightCurve
 
         #region 选择输出文件夹
 
-        private void BtSelOutputPath_Click(object sender, RoutedEventArgs e)
-            => TBOutputPath.Text = Core.Tools.File.SelectOutputDir(CBOutputType.SelectedIndex);
+        private void BtSelOutputDir_Click(object sender, RoutedEventArgs e)
+            => TBOutputDir.Text = Core.Tools.File.SelectOutputDir(CBOutputType.SelectedIndex);
 
-        private void TBOutputPath_TextChanged(object sender, TextChangedEventArgs e)
-            => BtRun.IsEnabled = files.Count > 0 && TBOutputPath.Text.Length > 0;
+        private void TBOutputDir_TextChanged(object sender, TextChangedEventArgs e)
+            => BtRun.IsEnabled = files.Count > 0 && TBOutputDir.Text.Length > 0;
 
         #endregion
 
@@ -117,7 +117,7 @@ namespace LightCurve
                 ReOrderFiles(CBOrder.SelectedIndex, CBDescending.IsChecked == true);
 
                 CBOrder.IsEnabled = CBDescending.IsEnabled = true;
-                BtRun.IsEnabled = TBOutputPath.Text.Length > 0;
+                BtRun.IsEnabled = TBOutputDir.Text.Length > 0;
             }
         }
 
@@ -192,7 +192,7 @@ namespace LightCurve
                         null,
                         null,
                         CBOutputType.SelectedIndex,
-                        TBOutputPath.Text)
+                        TBOutputDir.Text)
                     : new(files,
                         CBChannel.SelectedIndex,
                         uint.Parse(TBRangeX.Text),
@@ -200,7 +200,7 @@ namespace LightCurve
                         uint.Parse(TBRangeW.Text),
                         uint.Parse(TBRangeH.Text),
                         CBOutputType.SelectedIndex,
-                        TBOutputPath.Text);
+                        TBOutputDir.Text);
                 analyzer.Run();
             }
             if (mode == 2) // 视频
@@ -213,7 +213,7 @@ namespace LightCurve
                         null,
                         null,
                         CBOutputType.SelectedIndex,
-                        TBOutputPath.Text)
+                        TBOutputDir.Text)
                     : new(files,
                         CBChannel.SelectedIndex,
                         uint.Parse(TBRangeX.Text),
@@ -221,7 +221,7 @@ namespace LightCurve
                         uint.Parse(TBRangeW.Text),
                         uint.Parse(TBRangeH.Text),
                         CBOutputType.SelectedIndex,
-                        TBOutputPath.Text);
+                        TBOutputDir.Text);
                 analyzer.Run();
             }
         }

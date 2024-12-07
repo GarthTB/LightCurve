@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using OpenCvSharp;
 using System.IO;
+using System.Text;
 
 namespace LightCurve.Core.Tools
 {
@@ -68,6 +69,51 @@ namespace LightCurve.Core.Tools
             {
                 return false;
             }
+        }
+
+        /// <summary> 生成结果文件名 </summary>
+        internal static string GenOutName(List<FileInfo> files)
+        => files.Count == 1
+            ? Path.GetFileNameWithoutExtension(files[0].Name)
+            : $"{Path.GetFileNameWithoutExtension(files[0].Name)} - {Path.GetFileNameWithoutExtension(files[^1].Name)}";
+
+        /// <summary> 生成不重复的文件名 </summary>
+        private static string DistinctPath(string dir, string name, string ext)
+        {
+            var path = Path.Combine(dir, $"{name}.{ext}");
+            for (int i = 2; System.IO.File.Exists(path); i++)
+                path = Path.Combine(dir, $"{name}_{i}.{ext}");
+            return path;
+        }
+
+        /// <summary> 将结果列表输出到指定路径 </summary>
+        internal static void OutputTxt(double[] values, string dir, string name)
+        {
+            var path = DistinctPath(dir, name, "txt");
+
+            var sb = new StringBuilder();
+            _ = sb.AppendLine("序号\t值");
+            for (int i = 0; i < values.Length; i++)
+                _ = sb.AppendLine($"{i + 1}\t{values[i]}");
+
+            System.IO.File.WriteAllText(path, sb.ToString(), Encoding.UTF8);
+        }
+
+        /// <summary> 将结果折线图输出到指定路径 </summary>
+        internal static void OutputPlot(double[] values, string dir, string name)
+        {
+            var path = DistinctPath(dir, name, "png");
+
+            var indexes = Enumerable.Range(1, values.Length).ToArray();
+            ScottPlot.Plot plot = new();
+            _ = plot.Add.Scatter(indexes, values);
+            plot.XLabel("Frame Number");
+            plot.YLabel("Value");
+            plot.ScaleFactor = 2;
+            plot.Axes.SetLimits(1, indexes[^1], 0, 1);
+            plot.Axes.AntiAlias(true);
+
+            _ = plot.SavePng(path, 3000, 2000);
         }
     }
 }

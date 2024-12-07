@@ -230,7 +230,7 @@
             VerticalContentAlignment="Center"
             Content="输出位置" />
         <Button
-            x:Name="BtSelOutputPath"
+            x:Name="BtSelOutputDir"
             Grid.Row ="1"
             Grid.Column ="5"
             Height="28"
@@ -238,16 +238,16 @@
             VerticalAlignment="Top"
             Background="#FFE0E0E0"
             BorderBrush="#FFA0A0A0"
-            Click="BtSelOutputPath_Click"
+            Click="BtSelOutputDir_Click"
             Content="选择位置" />
         <TextBox
-            x:Name="TBOutputPath"
+            x:Name="TBOutputDir"
             Grid.Row ="1"
             Grid.Column ="4"
             Grid.ColumnSpan="2"
             Margin="8,217,0,0"
             IsReadOnly="True"
-            TextChanged="TBOutputPath_TextChanged"
+            TextChanged="TBOutputDir_TextChanged"
             TextWrapping="Wrap"
             ToolTip="结果文件将存储至此文件夹" />
         <Button

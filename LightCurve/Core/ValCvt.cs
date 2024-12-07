@@ -28,11 +28,26 @@ namespace LightCurve.Core
         /// <summary> 获取4通道图像指定通道的均值 </summary>
         internal static double MeanValue4(Mat image, int channel)
         {
-            var rgb = new Mat();
-            Cv2.CvtColor(image, rgb, ColorConversionCodes.BGRA2BGR);
-            image = rgb;
+            Cv2.CvtColor(image, image, ColorConversionCodes.BGRA2BGR);
             return MeanValue3(image, channel);
         }
+
+        /// <summary> 为结果文件名添加通道后缀 </summary>
+        internal static string AppendSuff(string name, int channel)
+        => channel switch
+        {
+            0 => $"{name}_CIEL",
+            1 => $"{name}_I",
+            2 => $"{name}_L",
+            3 => $"{name}_V",
+            4 => $"{name}_R",
+            5 => $"{name}_G",
+            6 => $"{name}_B",
+            7 => $"{name}_Sl",
+            8 => $"{name}_Sv",
+            9 => $"{name}_H",
+            _ => name,
+        };
 
         /// <summary> 获取Mat图允许的最大值 </summary>
         private static double Normalize(double value, int depth)

@@ -11,7 +11,7 @@ namespace LightCurve.Core
         uint? w,
         uint? h,
         int outputType,
-        string outputPath)
+        string outputDir)
     {
         internal void Run()
         {
@@ -19,7 +19,18 @@ namespace LightCurve.Core
             {
                 var ranges = files.Select(file => GetROI(file, x, y, w, h)).ToArray();
                 var values = ranges.Select(range => GetValue(range, channel)).ToArray();
-                Output(values, outputPath, outputType);
+                var outName = Tools.File.GenOutName(files);
+                outName = ValCvt.AppendSuff(outName, channel);
+                if (outputType == 0)
+                    Tools.File.OutputTxt(values, outputDir, outName);
+                else if (outputType == 1)
+                    Tools.File.OutputPlot(values, outputDir, outName);
+                else
+                {
+                    Tools.File.OutputTxt(values, outputDir, outName);
+                    Tools.File.OutputPlot(values, outputDir, outName);
+                }
+                Tools.MsgB.OkInfo("分析完成", "提示");
             }
             catch (Exception e)
             {
@@ -50,11 +61,5 @@ namespace LightCurve.Core
             4 => ValCvt.MeanValue4(range, channel), // 含透明度的彩色图
             _ => throw new ArgumentException("不支持的通道数量"),
         };
-
-        /// <summary> 将结果输出到指定路径 </summary>
-        private static void Output(double[] values, string path, int Type)
-        {
-
-        }
     }
 }
