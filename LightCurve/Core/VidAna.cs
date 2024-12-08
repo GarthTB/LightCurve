@@ -17,6 +17,8 @@ namespace LightCurve.Core
         /// <summary> 分析一组视频 </summary>
         internal void Run()
         {
+            var safe = true;
+
             foreach (var file in files)
             {
                 try
@@ -37,11 +39,12 @@ namespace LightCurve.Core
                 }
                 catch (Exception e)
                 {
+                    safe = false;
                     Tools.MsgB.OkErr($"分析文件\"{file.Name}\"时出错：{e.Message}", "出错，已跳过");
                 }
             }
 
-            Tools.MsgB.OkInfo("分析完成", "提示");
+            Tools.MsgB.OkInfo(safe ? "全部分析成功" : "分析结束", "提示");
         }
     }
 }
