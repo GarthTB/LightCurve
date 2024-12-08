@@ -74,10 +74,7 @@ namespace LightCurve.Core
 
         /// <summary> 提取CIEL通道的均值 </summary>
         private static double MeanCIEL(Mat image)
-        {
-            using Mat labImage = image.CvtColor(ColorConversionCodes.BGR2Lab);
-            return NormalizedMean(Cv2.Split(labImage)[0]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2Lab))[0]);
 
         /// <summary> 提取I通道的均值 </summary>
         private static double MeanI(Mat image)
@@ -85,37 +82,22 @@ namespace LightCurve.Core
 
         /// <summary> 提取L通道的均值 </summary>
         private static double MeanL(Mat image)
-        {
-            using Mat hlsImage = image.CvtColor(ColorConversionCodes.BGR2HLS);
-            return NormalizedMean(Cv2.Split(hlsImage)[1]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2HLS))[1]);
 
         /// <summary> 提取V通道的均值 </summary>
         private static double MeanV(Mat image)
-        {
-            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
-            return NormalizedMean(Cv2.Split(hsvImage)[2]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2HSV))[2]);
 
         /// <summary> 提取Sl通道的均值 </summary>
         private static double MeanSl(Mat image)
-        {
-            using Mat hlsImage = image.CvtColor(ColorConversionCodes.BGR2HLS);
-            return NormalizedMean(Cv2.Split(hlsImage)[2]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2HLS))[2]);
 
         /// <summary> 提取Sv通道的均值 </summary>
         private static double MeanSv(Mat image)
-        {
-            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
-            return NormalizedMean(Cv2.Split(hsvImage)[1]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2HSV))[1]);
 
         /// <summary> 提取H通道的均值 </summary>
         private static double MeanH(Mat image)
-        {
-            using Mat hsvImage = image.CvtColor(ColorConversionCodes.BGR2HSV);
-            return NormalizedMean(Cv2.Split(hsvImage)[0]);
-        }
+            => NormalizedMean(Cv2.Split(image.CvtColor(ColorConversionCodes.BGR2HSV))[0]);
     }
 }

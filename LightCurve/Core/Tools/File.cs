@@ -15,11 +15,9 @@ namespace LightCurve.Core.Tools
             {
                 Title = "选择输出文件夹",
                 FileName = "临时文件名，最后会根据原文件名修改",
-                Filter = typeIndex switch
-                {
-                    0 => "png图片文件(*.png)|*.png",
-                    _ => "txt文本文件(*.txt)|*.txt",
-                },
+                Filter = typeIndex == 0
+                    ? "png图片文件(*.png)|*.png"
+                    : "txt文本文件(*.txt)|*.txt",
             };
             return dialog.ShowDialog() == true
                 ? Path.GetDirectoryName(dialog.FileName) ?? "" : "";
@@ -43,15 +41,8 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
         {
-            try
-            {
-                using var image = Cv2.ImRead(path);
-                return !image.Empty();
-            }
-            catch
-            {
-                return false;
-            }
+            try { return !Cv2.ImRead(path).Empty(); }
+            catch { return false; }
         }
 
         /// <summary> 判断文件是否全为视频 </summary>
@@ -61,15 +52,8 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为视频 </summary>
         private static bool IsVideo(string path)
         {
-            try
-            {
-                using var videoCapture = new VideoCapture(path);
-                return videoCapture.IsOpened();
-            }
-            catch
-            {
-                return false;
-            }
+            try { return new VideoCapture(path).IsOpened(); }
+            catch { return false; }
         }
 
         /// <summary> 生成结果文件名 </summary>
@@ -123,27 +107,31 @@ namespace LightCurve.Core.Tools
         {
             var path = DistinctPath(dir, name, "png");
 
-            var indexes = Enumerable.Range(1, values.Length).ToArray();
-            ScottPlot.Plot plot = new();
-            _ = plot.Add.Scatter(indexes, values);
+            ScottPlot.Plot plot = new() { ScaleFactor = 2 };
+            plot.Axes.AntiAlias(true);
             plot.XLabel("Frame Number");
             plot.YLabel("Value");
-            plot.ScaleFactor = 2;
+
+            var indexes = Enumerable.Range(1, values.Length).ToArray();
+            _ = plot.Add.Scatter(indexes, values);
 
             if (values.Length == 1) plot.Axes.SetLimitsX(0, 2);
             else plot.Axes.SetLimitsX(1, indexes[^1]);
-            if (values.Max() > 0.3) plot.Axes.SetLimitsY(0, 1);
-            else plot.Axes.SetLimitsY(0, values.Max() * 1.1); // 优化线性图
 
-            plot.Axes.AntiAlias(true);
             var plotWidth = values.Length switch
             {
-                <= 200 => 2000,
-                >= 480 => 4800,
-                _ => values.Length * 10,
+                <= 400 => 2400,
+                >= 800 => 4800,
+                _ => values.Length * 6,
             };
 
-            _ = plot.SavePng(path, plotWidth, 2000);
+            // 未放大的图
+            plot.Axes.SetLimitsY(0, 1);
+            _ = plot.SavePng(path, plotWidth, 1600);
+            // 放大后的图
+            plot.Axes.SetLimitsY(values.Min() * 0.8, values.Max() * 1.2);
+            path = DistinctPath(dir, $"{name}_zoom", "png");
+            _ = plot.SavePng(path, plotWidth, 1600);
         }
     }
 }

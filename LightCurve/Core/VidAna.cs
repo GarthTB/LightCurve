@@ -17,7 +17,7 @@ namespace LightCurve.Core
         /// <summary> 分析一组视频 </summary>
         internal void Run()
         {
-            _ = Parallel.ForEach(files, file =>
+            foreach (var file in files)
             {
                 try
                 {
@@ -27,10 +27,9 @@ namespace LightCurve.Core
 
                     Mat frame = new();
                     while (vid.Read(frame))
-                    {
-                        Mat roi = ImgProc.GetROI(frame, x, y, w, h);
-                        values.Add(ImgProc.MeanValue(roi, channel));
-                    }
+                        values.Add(
+                            ImgProc.MeanValue(
+                                ImgProc.GetROI(frame, x, y, w, h), channel));
 
                     var outName = Tools.File.GenOutName([file]);
                     outName = ValCvt.AppendSuff(outName, channel);
@@ -40,7 +39,7 @@ namespace LightCurve.Core
                 {
                     Tools.MsgB.OkErr($"分析文件\"{file.Name}\"时出错：{e.Message}", "出错，已跳过");
                 }
-            });
+            }
 
             Tools.MsgB.OkInfo("分析完成", "提示");
         }
