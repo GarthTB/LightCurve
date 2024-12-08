@@ -21,12 +21,11 @@ namespace LightCurve.Core
             {
                 var values = new double[files.Count];
                 _ = Parallel.For(0, values.Length, i =>
-                    values[i] = ImgProc.MeanValue(
-                        ImgProc.GetROI(
-                            Cv2.ImRead(files[i].FullName), x, y, w, h), channel));
+                    values[i] = Cv2.ImRead(files[i].FullName)
+                                   .GetROI(x, y, w, h)
+                                   .ChMean(channel));
 
-                var outName = Tools.File.GenOutName(files);
-                outName = ValCvt.AppendSuff(outName, channel);
+                var outName = Tools.File.GenOutName(files).AppendCh(channel);
                 Tools.File.OutputValues(outputType, values, outputDir, outName);
 
                 Tools.MsgB.OkInfo("分析完成", "提示");

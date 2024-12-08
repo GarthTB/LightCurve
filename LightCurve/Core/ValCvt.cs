@@ -6,11 +6,11 @@ namespace LightCurve.Core
     internal static class ValCvt
     {
         /// <summary> 获取单色图像指定通道的均值 </summary>
-        internal static double MeanValue1(Mat image, int channel)
+        internal static double MeanValue1(this Mat image, int channel)
             => channel is >= 0 and <= 6 ? Cv2.Mean(image).Val0 : 0;
 
         /// <summary> 获取3通道图像指定通道的均值 </summary>
-        internal static double MeanValue3(Mat image, int channel)
+        internal static double MeanValue3(this Mat image, int channel)
         => channel switch
         {
             0 => image.MeanCIEL(),
@@ -27,14 +27,14 @@ namespace LightCurve.Core
         };
 
         /// <summary> 获取4通道图像指定通道的均值 </summary>
-        internal static double MeanValue4(Mat image, int channel)
+        internal static double MeanValue4(this Mat image, int channel)
         {
             Cv2.CvtColor(image, image, ColorConversionCodes.BGRA2BGR);
             return MeanValue3(image, channel);
         }
 
         /// <summary> 为结果文件名添加通道后缀 </summary>
-        internal static string AppendSuff(string name, int channel)
+        internal static string AppendCh(this string name, int channel)
         => channel switch
         {
             0 => $"{name}_CIEL",

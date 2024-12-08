@@ -105,7 +105,7 @@ namespace LightCurve.Core.Tools
         /// <summary> 将结果折线图输出到指定路径 </summary>
         private static void OutputPlot(double[] values, string dir, string name)
         {
-            var path = DistinctPath(dir, name, "png");
+            var path = DistinctPath(dir, $"{name}_zoom", "png");
 
             ScottPlot.Plot plot = new() { ScaleFactor = 2 };
             plot.Axes.AntiAlias(true);
@@ -124,13 +124,11 @@ namespace LightCurve.Core.Tools
                 >= 800 => 4800,
                 _ => values.Length * 6,
             };
-
+            // 放大后的图
+            _ = plot.SavePng(path, plotWidth, 1600);
             // 未放大的图
             plot.Axes.SetLimitsY(0, 1);
-            _ = plot.SavePng(path, plotWidth, 1600);
-            // 放大后的图
-            plot.Axes.SetLimitsY(values.Min() * 0.8, values.Max() * 1.2);
-            path = DistinctPath(dir, $"{name}_zoom", "png");
+            path = DistinctPath(dir, name, "png");
             _ = plot.SavePng(path, plotWidth, 1600);
         }
     }

@@ -6,7 +6,7 @@ namespace LightCurve.Core
     internal static class ImgProc
     {
         /// <summary> 将一张图片中的ROI提取为一张新图 </summary>
-        internal static Mat GetROI(Mat image, uint? x, uint? y, uint? w, uint? h)
+        internal static Mat GetROI(this Mat image, uint? x, uint? y, uint? w, uint? h)
         {
             if (image.Empty())
                 throw new ArgumentException("无法加载图像");
@@ -18,13 +18,13 @@ namespace LightCurve.Core
             return new Mat(image, roi);
         }
 
-        /// <summary> 计算一块ROI中指定指标的均值 </summary>
-        internal static double MeanValue(Mat image, int channel)
+        /// <summary> 计算一块ROI图的指定通道的均值 </summary>
+        internal static double ChMean(this Mat image, int channel)
         => image.Channels() switch
         {
-            1 => ValCvt.MeanValue1(image, channel), // 单色图
-            3 => ValCvt.MeanValue3(image, channel), // 彩色图
-            4 => ValCvt.MeanValue4(image, channel), // 含透明度的彩色图
+            1 => image.MeanValue1(channel), // 单色图
+            3 => image.MeanValue3(channel), // 彩色图
+            4 => image.MeanValue4(channel), // 含透明度的彩色图
             _ => throw new ArgumentException("不支持的通道数量"),
         };
     }

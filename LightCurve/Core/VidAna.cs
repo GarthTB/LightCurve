@@ -23,19 +23,21 @@ namespace LightCurve.Core
             {
                 try
                 {
-                    using VideoCapture vid = new(file.FullName);
-                    var values = vid.FrameCount > 0
-                        ? new List<double>(vid.FrameCount) : [];
+                    VideoCapture vid = new(file.FullName);
+                    if (vid.FrameCount <= 0)
+                        throw new Exception("无效的视频帧数。");
+                    var values = new double[vid.FrameCount];
 
-                    Mat frame = new();
-                    while (vid.Read(frame))
-                        values.Add(
-                            ImgProc.MeanValue(
-                                ImgProc.GetROI(frame, x, y, w, h), channel));
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        Mat frame = new();
+                        if (!vid.Read(frame))
+                            throw new Exception("读取视频帧失败。");
+                        values[i] = frame.GetROI(x, y, w, h).ChMean(channel);
+                    }
 
-                    var outName = Tools.File.GenOutName([file]);
-                    outName = ValCvt.AppendSuff(outName, channel);
-                    Tools.File.OutputValues(outputType, [.. values], outputDir, outName);
+                    var outName = Tools.File.GenOutName([file]).AppendCh(channel);
+                    Tools.File.OutputValues(outputType, values, outputDir, outName);
                 }
                 catch (Exception e)
                 {
