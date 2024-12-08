@@ -9,6 +9,7 @@
     Width="520"
     Height="400"
     mc:Ignorable="d"
+    AllowDrop="True"
     FontSize="16"
     KeyDown="MW_KeyDown"
     Title="LightCurve">
@@ -35,6 +36,7 @@
             Grid.Column ="1"
             Grid.ColumnSpan="3"
             Margin="0,0,4,0"
+            Drop="LBPaths_Drop"
             SelectionChanged="LBPaths_SelectionChanged"
             SelectionMode="Multiple" />
         <Button
@@ -141,7 +143,7 @@
             Grid.Column ="4"
             Grid.ColumnSpan="2"
             Height="64"
-            Margin="8,73,0,0"
+            Margin="8,72,0,0"
             VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -245,7 +247,7 @@
             Grid.Row ="1"
             Grid.Column ="4"
             Grid.ColumnSpan="2"
-            Margin="8,217,0,0"
+            Margin="8,218,0,0"
             IsReadOnly="True"
             TextChanged="TBOutputDir_TextChanged"
             TextWrapping="Wrap"

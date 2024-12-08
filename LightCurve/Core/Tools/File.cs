@@ -37,8 +37,8 @@ namespace LightCurve.Core.Tools
         }
 
         /// <summary> 判断文件是否全为图片 </summary>
-        internal static bool IsImages(string[] path)
-            => path.AsParallel().All(IsImage);
+        internal static bool IsImages(string[] paths)
+            => paths.AsParallel().All(IsImage);
 
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
@@ -55,8 +55,8 @@ namespace LightCurve.Core.Tools
         }
 
         /// <summary> 判断文件是否全为视频 </summary>
-        internal static bool IsVideos(string[] path)
-            => path.AsParallel().All(IsVideo);
+        internal static bool IsVideos(string[] paths)
+            => paths.AsParallel().All(IsVideo);
 
         /// <summary> 判断文件是否为视频 </summary>
         private static bool IsVideo(string path)

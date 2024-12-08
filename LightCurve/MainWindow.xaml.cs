@@ -92,6 +92,31 @@ namespace LightCurve
             var fileNames = Core.Tools.File.PickInputs();
             if (fileNames.Length == 0) return;
 
+            MatchType(fileNames);
+        }
+
+        private void LBPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+            => BtRemovePaths.IsEnabled = LBPaths.SelectedItems.Count > 0;
+
+        private void BtRemovePaths_Click(object sender, RoutedEventArgs e)
+        {
+            var sel_paths = LBPaths.SelectedItems.Cast<string>().ToArray();
+            _ = files.RemoveAll(x => sel_paths.Contains(x.FullName));
+            paths = files.Select(x => x.FullName).ToList();
+            LBPaths.ItemsSource = paths;
+            if (files.Count == 0)
+            {
+                mode = 0;
+                TBOutputDir.Text = "";
+                BtRemovePaths.IsEnabled =
+                BtRun.IsEnabled =
+                CBOrder.IsEnabled =
+                CBDescending.IsEnabled = false;
+            }
+        }
+
+        private void MatchType(string[] fileNames)
+        {
             if (Core.Tools.File.IsImages(fileNames))
             {
                 if (mode == 2)
@@ -127,23 +152,14 @@ namespace LightCurve
             }
         }
 
-        private void LBPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            => BtRemovePaths.IsEnabled = LBPaths.SelectedItems.Count > 0;
+        #endregion
 
-        private void BtRemovePaths_Click(object sender, RoutedEventArgs e)
+        #region 拖动文件
+
+        private void LBPaths_Drop(object sender, DragEventArgs e)
         {
-            var sel_paths = LBPaths.SelectedItems.Cast<string>().ToArray();
-            _ = files.RemoveAll(x => sel_paths.Contains(x.FullName));
-            paths = files.Select(x => x.FullName).ToList();
-            LBPaths.ItemsSource = paths;
-            if (files.Count == 0)
-            {
-                mode = 0;
-                BtRemovePaths.IsEnabled =
-                BtRun.IsEnabled =
-                CBOrder.IsEnabled =
-                CBDescending.IsEnabled = false;
-            }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                MatchType((string[])e.Data.GetData(DataFormats.FileDrop));
         }
 
         #endregion
@@ -190,6 +206,7 @@ namespace LightCurve
 
         private void BtRun_Click(object sender, RoutedEventArgs e)
         {
+            MW.Title = "LightCurve 处理中...";
             if (mode == 1) // 图片
             {
                 Core.ImgAna analyzer = CBFullFrame.IsChecked == true
@@ -232,6 +249,7 @@ namespace LightCurve
                         TBOutputDir.Text);
                 analyzer.Run();
             }
+            MW.Title = "LightCurve";
         }
 
         #endregion
