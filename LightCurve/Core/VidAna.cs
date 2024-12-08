@@ -28,9 +28,9 @@ namespace LightCurve.Core
                         throw new Exception("无效的视频帧数。");
                     var values = new double[vid.FrameCount];
 
+                    Mat frame = new();
                     for (int i = 0; i < values.Length; i++)
                     {
-                        Mat frame = new();
                         if (!vid.Read(frame))
                             throw new Exception("读取视频帧失败。");
                         values[i] = frame.GetROI(x, y, w, h).ChMean(channel);

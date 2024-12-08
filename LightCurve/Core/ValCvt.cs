@@ -28,10 +28,7 @@ namespace LightCurve.Core
 
         /// <summary> 获取4通道图像指定通道的均值 </summary>
         internal static double MeanValue4(this Mat image, int channel)
-        {
-            Cv2.CvtColor(image, image, ColorConversionCodes.BGRA2BGR);
-            return MeanValue3(image, channel);
-        }
+            => image.CvtColor(ColorConversionCodes.BGRA2BGR).MeanValue3(channel);
 
         /// <summary> 为结果文件名添加通道后缀 </summary>
         internal static string AppendCh(this string name, int channel)
