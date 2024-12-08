@@ -130,8 +130,10 @@ namespace LightCurve.Core.Tools
             plot.YLabel("Value");
             plot.ScaleFactor = 2;
 
-            if (values.Length > 1) plot.Axes.SetLimits(1, indexes[^1], 0, 1);
-            else plot.Axes.SetLimits(0, 2, 0, 1);
+            if (values.Length == 1) plot.Axes.SetLimitsX(0, 2);
+            else plot.Axes.SetLimitsX(1, indexes[^1]);
+            if (values.Max() > 0.3) plot.Axes.SetLimitsY(0, 1);
+            else plot.Axes.SetLimitsY(0, values.Max() * 1.1); // 优化线性图
 
             plot.Axes.AntiAlias(true);
             var plotWidth = values.Length switch

@@ -25,11 +25,11 @@ namespace LightCurve.Core
                     var values = vid.FrameCount > 0
                         ? new List<double>(vid.FrameCount) : [];
 
-                    Mat frame = new(), roi = new();
+                    Mat frame = new();
                     while (vid.Read(frame))
                     {
-                        roi = ImgProc.GetROI(frame, x, y, w, h);
-                        values.Add(ImgProc.GetValue(roi, channel));
+                        Mat roi = ImgProc.GetROI(frame, x, y, w, h);
+                        values.Add(ImgProc.MeanValue(roi, channel));
                     }
 
                     var outName = Tools.File.GenOutName([file]);

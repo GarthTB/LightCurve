@@ -19,7 +19,7 @@ namespace LightCurve.Core
         }
 
         /// <summary> 计算一块ROI中指定指标的均值 </summary>
-        internal static double GetValue(Mat image, int channel)
+        internal static double MeanValue(Mat image, int channel)
         => image.Channels() switch
         {
             1 => ValCvt.MeanValue1(image, channel), // 单色图

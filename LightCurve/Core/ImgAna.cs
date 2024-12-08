@@ -24,7 +24,7 @@ namespace LightCurve.Core
                 {
                     using Mat image = Cv2.ImRead(files[i].FullName);
                     using Mat roi = ImgProc.GetROI(image, x, y, w, h);
-                    values[i] = ImgProc.GetValue(roi, channel);
+                    values[i] = ImgProc.MeanValue(roi, channel);
                 });
 
                 var outName = Tools.File.GenOutName(files);

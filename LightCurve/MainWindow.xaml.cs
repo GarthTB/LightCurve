@@ -206,7 +206,7 @@ namespace LightCurve
 
         private void BtRun_Click(object sender, RoutedEventArgs e)
         {
-            MW.Title = "LightCurve 处理中...";
+            MW.Title = "LightCurve 处理中，请勿关闭...";
             if (mode == 1) // 图片
             {
                 Core.ImgAna analyzer = CBFullFrame.IsChecked == true

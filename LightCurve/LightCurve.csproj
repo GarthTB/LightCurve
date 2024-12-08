@@ -9,7 +9,7 @@
     <StartupObject>LightCurve.App</StartupObject>
     <Title>LightCurve</Title>
     <PackageId>LightCurve</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>GarthTB</Authors>
     <Company>GarthTB</Company>
     <Product>LightCurve</Product>
