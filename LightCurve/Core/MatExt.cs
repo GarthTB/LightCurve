@@ -6,15 +6,7 @@ namespace LightCurve.Core
     internal static class MatExt
     {
         /// <summary> 单通道图像的均值 </summary>
-        private static double Mean(Mat image)
-        {
-            unsafe
-            {
-                var pixels = new double[image.Width * image.Height];
-                System.Runtime.InteropServices.Marshal.Copy((nint)image.DataPointer, pixels, 0, pixels.Length);
-                return GPUProc.Mean(pixels);
-            }
-        }
+        private static double Mean(Mat image) => Cv2.Mean(image).Val0;
 
         /// <summary> 获取单通道图像归一化后的均值 </summary>
         private static double NormalizedMean(this Mat image)

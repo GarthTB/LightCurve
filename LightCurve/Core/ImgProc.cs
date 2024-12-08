@@ -8,8 +8,6 @@ namespace LightCurve.Core
         /// <summary> 将一张图片中的ROI提取为一张新图 </summary>
         internal static Mat GetROI(this Mat image, uint? x, uint? y, uint? w, uint? h)
         {
-            if (image.Empty())
-                throw new ArgumentException("无法加载图像");
             if (x is null || y is null || w is null || h is null)
                 return image; // 直接返回全帧
             if (x + w > image.Cols || y + h > image.Rows)
