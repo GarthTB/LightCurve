@@ -129,12 +129,14 @@ namespace LightCurve.Core.Tools
             plot.XLabel("Frame Number");
             plot.YLabel("Value");
             plot.ScaleFactor = 2;
-            if (values.Length > 1)
-                plot.Axes.SetLimits(1, indexes[^1], 0, 1);
+
+            if (values.Length > 1) plot.Axes.SetLimits(1, indexes[^1], 0, 1);
+            else plot.Axes.SetLimits(0, 2, 0, 1);
+
             plot.Axes.AntiAlias(true);
             var plotWidth = values.Length switch
             {
-                <= 80 => 800,
+                <= 200 => 2000,
                 >= 480 => 4800,
                 _ => values.Length * 10,
             };

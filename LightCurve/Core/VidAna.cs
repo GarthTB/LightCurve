@@ -22,18 +22,19 @@ namespace LightCurve.Core
                 try
                 {
                     using VideoCapture vid = new(file.FullName);
-                    var values = new double[vid.FrameCount];
+                    var values = vid.FrameCount > 0
+                        ? new List<double>(vid.FrameCount) : [];
 
                     Mat frame = new(), roi = new();
-                    for (int i = 0; vid.Read(frame); i++)
+                    while (vid.Read(frame))
                     {
                         roi = ImgProc.GetROI(frame, x, y, w, h);
-                        values[i] = ImgProc.GetValue(roi, channel);
+                        values.Add(ImgProc.GetValue(roi, channel));
                     }
 
                     var outName = Tools.File.GenOutName([file]);
                     outName = ValCvt.AppendSuff(outName, channel);
-                    Tools.File.OutputValues(outputType, values, outputDir, outName);
+                    Tools.File.OutputValues(outputType, [.. values], outputDir, outName);
                 }
                 catch (Exception e)
                 {
