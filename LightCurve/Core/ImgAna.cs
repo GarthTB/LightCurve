@@ -20,10 +20,19 @@ namespace LightCurve.Core
             try
             {
                 var values = new double[files.Count];
-                _ = Parallel.For(0, values.Length, i =>
-                    values[i] = Cv2.ImRead(files[i].FullName)
-                                   .GetROI(x, y, w, h)
-                                   .ChMean(channel));
+                var groupSize = 32;
+                for (int start = 0; ; start += groupSize)
+                {
+                    var end = GetImageGroup(files, start, groupSize, out var frames);
+                    _ = Parallel.For(0, groupSize, i =>
+                    {
+                        var index = start + i;
+                        if (index < values.Length)
+                            values[index] = frames[i].GetROI(x, y, w, h).ChMean(channel);
+                    });
+                    GC.Collect();
+                    if (end) break;
+                }
 
                 var outName = Tools.File.GenOutName(files).AppendCh(channel);
                 Tools.File.OutputValues(outputType, values, outputDir, outName);
@@ -31,6 +40,19 @@ namespace LightCurve.Core
                 Tools.MsgB.OkInfo("分析完成", "提示");
             }
             catch (Exception e) { Tools.MsgB.OkErr($"运行出错：{e.Message}", "异常中止"); }
+        }
+
+        /// <summary> 获取一组图片，若已到末尾则返回true </summary>
+        private static bool GetImageGroup(List<FileInfo> files, int start, int size, out Mat[] group)
+        {
+            group = Enumerable.Range(0, size).Select(_ => new Mat()).ToArray();
+            for (int i = 0; i < size; i++)
+            {
+                var index = start + i;
+                group[i] = Cv2.ImRead(files[index].FullName);
+                if (index == files.Count - 1) return true;
+            }
+            return false;
         }
     }
 }

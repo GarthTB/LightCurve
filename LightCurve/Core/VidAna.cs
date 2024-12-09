@@ -28,12 +28,18 @@ namespace LightCurve.Core
                         throw new Exception("无效的视频帧数。");
                     var values = new double[vid.FrameCount];
 
-                    Mat frame = new();
-                    for (int i = 0; i < values.Length; i++)
+                    var groupSize = 64;
+                    for (int start = 0; ; start += groupSize)
                     {
-                        if (!vid.Read(frame))
-                            throw new Exception("读取视频帧失败。");
-                        values[i] = frame.GetROI(x, y, w, h).ChMean(channel);
+                        var end = GetFrameGroup(vid, start, groupSize, out var frames);
+                        _ = Parallel.For(0, groupSize, i =>
+                        {
+                            var index = start + i;
+                            if (index < values.Length)
+                                values[index] = frames[i].GetROI(x, y, w, h).ChMean(channel);
+                        });
+                        GC.Collect();
+                        if (end) break;
                     }
 
                     var outName = Tools.File.GenOutName([file]).AppendCh(channel);
@@ -47,6 +53,17 @@ namespace LightCurve.Core
             }
 
             Tools.MsgB.OkInfo(safe ? "全部分析成功" : "分析结束", "提示");
+        }
+
+        /// <summary> 获取一组视频帧，若已到末尾则返回true </summary>
+        private static bool GetFrameGroup(VideoCapture vid, int start, int size, out Mat[] group)
+        {
+            vid.PosFrames = start;
+            group = Enumerable.Range(0, size).Select(_ => new Mat()).ToArray();
+            for (int i = 0; i < size; i++)
+                if (!vid.Read(group[i]))
+                    return true;
+            return false;
         }
     }
 }
