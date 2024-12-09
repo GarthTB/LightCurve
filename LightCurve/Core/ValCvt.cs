@@ -1,5 +1,4 @@
-﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
+﻿using OpenCvSharp;
 
 namespace LightCurve.Core
 {
@@ -8,7 +7,7 @@ namespace LightCurve.Core
     {
         /// <summary> 获取单色图像指定通道的均值 </summary>
         internal static double MeanValue1(this Mat image, int channel)
-            => channel is >= 0 and <= 6 ? CvInvoke.Mean(image).V0 : 0;
+            => channel is >= 0 and <= 6 ? Cv2.Mean(image).Val0 : 0;
 
         /// <summary> 获取3通道图像指定通道的均值 </summary>
         internal static double MeanValue3(this Mat image, int channel)
@@ -29,11 +28,7 @@ namespace LightCurve.Core
 
         /// <summary> 获取4通道图像指定通道的均值 </summary>
         internal static double MeanValue4(this Mat image, int channel)
-        {
-            Mat bgr = new();
-            CvInvoke.CvtColor(image, bgr, ColorConversion.Bgra2Bgr);
-            return bgr.MeanValue3(channel);
-        }
+            => image.CvtColor(ColorConversionCodes.BGRA2BGR).MeanValue3(channel);
 
         /// <summary> 为结果文件名添加通道后缀 </summary>
         internal static string AppendCh(this string name, int channel)

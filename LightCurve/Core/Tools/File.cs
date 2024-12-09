@@ -1,5 +1,5 @@
-﻿using Emgu.CV;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using OpenCvSharp;
 using System.IO;
 using System.Text;
 
@@ -41,9 +41,8 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
         {
-            try { return !new Mat(path).IsEmpty; }
+            try { return !Cv2.ImRead(path).Empty(); }
             catch { return false; }
-            finally { GC.Collect(); }
         }
 
         /// <summary> 判断文件是否全为视频 </summary>
@@ -53,9 +52,8 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为视频 </summary>
         private static bool IsVideo(string path)
         {
-            try { return new VideoCapture(path).IsOpened; }
+            try { return new VideoCapture(path).IsOpened(); }
             catch { return false; }
-            finally { GC.Collect(); }
         }
 
         /// <summary> 生成结果文件名 </summary>
@@ -97,7 +95,7 @@ namespace LightCurve.Core.Tools
             var path = DistinctPath(dir, name, "txt");
 
             var sb = new StringBuilder();
-            _ = sb.AppendLine("帧号\t值");
+            _ = sb.AppendLine("序号\t值");
             for (int i = 0; i < values.Length; i++)
                 _ = sb.AppendLine($"{i + 1}\t{values[i]}");
 
@@ -122,8 +120,8 @@ namespace LightCurve.Core.Tools
 
             var plotWidth = values.Length switch
             {
-                <= 400 => 2560,
-                >= 800 => 5120,
+                <= 400 => 2400,
+                >= 800 => 4800,
                 _ => values.Length * 6,
             };
             // 放大后的图
