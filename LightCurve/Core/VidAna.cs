@@ -25,18 +25,18 @@ namespace LightCurve.Core
                 {
                     VideoCapture vid = new(file.FullName);
                     if (vid.FrameCount <= 0)
-                        throw new Exception("无效的视频帧数。");
-                    var values = new double[vid.FrameCount];
+                        throw new Exception("无法获取视频总帧数。");
 
-                    var groupSize = 64;
-                    for (int start = 0; ; start += groupSize)
+                    var values = new double[vid.FrameCount];
+                    var group = Enumerable.Range(0, 64).Select(_ => new Mat()).ToArray();
+                    for (int start = 0; ; start += group.Length)
                     {
-                        var end = GetFrameGroup(vid, start, groupSize, out var frames);
-                        _ = Parallel.For(0, groupSize, i =>
+                        var end = GetFrameGroup(vid, start, group);
+                        _ = Parallel.For(0, group.Length, i =>
                         {
                             var index = start + i;
                             if (index < values.Length)
-                                values[index] = frames[i].GetROI(x, y, w, h).ChMean(channel);
+                                values[index] = group[i].GetROI(x, y, w, h).ChMean(channel);
                         });
                         GC.Collect();
                         if (end) break;
@@ -56,12 +56,11 @@ namespace LightCurve.Core
         }
 
         /// <summary> 获取一组视频帧，若已到末尾则返回true </summary>
-        private static bool GetFrameGroup(VideoCapture vid, int start, int size, out Mat[] group)
+        private static bool GetFrameGroup(VideoCapture vid, int start, Mat[] group)
         {
             vid.PosFrames = start;
-            group = Enumerable.Range(0, size).Select(_ => new Mat()).ToArray();
-            for (int i = 0; i < size; i++)
-                if (!vid.Read(group[i]))
+            foreach (var frameRef in group)
+                if (!vid.Read(frameRef))
                     return true;
             return false;
         }

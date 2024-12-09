@@ -41,7 +41,7 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
         {
-            try { return !Cv2.ImRead(path).Empty(); }
+            try { return !new Mat(path).Empty(); }
             catch { return false; }
         }
 
@@ -95,7 +95,7 @@ namespace LightCurve.Core.Tools
             var path = DistinctPath(dir, name, "txt");
 
             var sb = new StringBuilder();
-            _ = sb.AppendLine("序号\t值");
+            _ = sb.AppendLine("帧号\t值");
             for (int i = 0; i < values.Length; i++)
                 _ = sb.AppendLine($"{i + 1}\t{values[i]}");
 
@@ -120,8 +120,8 @@ namespace LightCurve.Core.Tools
 
             var plotWidth = values.Length switch
             {
-                <= 400 => 2400,
-                >= 800 => 4800,
+                <= 400 => 2560,
+                >= 800 => 5120,
                 _ => values.Length * 6,
             };
             // 放大后的图
