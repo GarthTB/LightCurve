@@ -18,6 +18,19 @@ namespace LightCurve.Core
             _ => throw new ArgumentException("不支持的位深度！")
         };
 
+        /// <summary> 提取H通道的均值 </summary>
+        internal static double MeanH(this Mat image)
+        {
+            var h = image.CvtColor(ColorConversionCodes.BGR2HSV).ExtractChannel(0);
+            return h.Depth() switch
+            {
+                MatType.CV_8U => Mean(h) / 179.0, // H通道范围0-179
+                MatType.CV_16U => Mean(h) / 65535.0, // 未验证
+                MatType.CV_32F or MatType.CV_64F => Mean(h) / 360.0, // 未验证
+                _ => throw new ArgumentException("不支持的位深度！")
+            };
+        }
+
         /// <summary> 提取B通道的均值 </summary>
         internal static double MeanB(this Mat image)
             => image.ExtractChannel(0).NormalizedMean();
@@ -32,15 +45,11 @@ namespace LightCurve.Core
 
         /// <summary> 提取I通道的均值 </summary>
         internal static double MeanI(this Mat image)
-            => (image.MeanR() + image.MeanG() + image.MeanB()) / 3;
+            => (image.MeanR() + image.MeanG() + image.MeanB()) / 3.0;
 
         /// <summary> 提取CIEL通道的均值 </summary>
         internal static double MeanCIEL(this Mat image)
             => image.CvtColor(ColorConversionCodes.BGR2Lab).ExtractChannel(0).NormalizedMean();
-
-        /// <summary> 提取H通道的均值 </summary>
-        internal static double MeanH(this Mat image)
-            => image.CvtColor(ColorConversionCodes.BGR2HSV).ExtractChannel(0).NormalizedMean();
 
         /// <summary> 提取Sv通道的均值 </summary>
         internal static double MeanSv(this Mat image)
@@ -50,12 +59,12 @@ namespace LightCurve.Core
         internal static double MeanV(this Mat image)
             => image.CvtColor(ColorConversionCodes.BGR2HSV).ExtractChannel(2).NormalizedMean();
 
-        /// <summary> 提取L通道的均值 </summary>
-        internal static double MeanL(this Mat image)
-            => image.CvtColor(ColorConversionCodes.BGR2HLS).ExtractChannel(1).NormalizedMean();
-
         /// <summary> 提取Sl通道的均值 </summary>
         internal static double MeanSl(this Mat image)
             => image.CvtColor(ColorConversionCodes.BGR2HLS).ExtractChannel(2).NormalizedMean();
+
+        /// <summary> 提取L通道的均值 </summary>
+        internal static double MeanL(this Mat image)
+            => image.CvtColor(ColorConversionCodes.BGR2HLS).ExtractChannel(1).NormalizedMean();
     }
 }
