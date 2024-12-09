@@ -47,9 +47,9 @@ namespace LightCurve.Core
         {
             for (int i = 0; i < group.Length; i++)
             {
-                var fileNum = start + i;
-                group[i] = new Mat(files[fileNum].FullName, ImreadModes.Unchanged);
-                if (fileNum == files.Count - 1) return true;
+                var fileIdx = start + i;
+                group[i] = new Mat(files[fileIdx].FullName, ImreadModes.Unchanged);
+                if (fileIdx == files.Count - 1) return true;
             }
             return false;
         }

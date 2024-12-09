@@ -31,7 +31,7 @@ namespace LightCurve.Core
                     var group = Enumerable.Range(0, 64).Select(_ => new Mat()).ToArray();
                     for (int start = 0; ; start += group.Length)
                     {
-                        var end = GetFrameGroup(vid, start, group);
+                        var end = GetFrameGroup(vid, group);
                         _ = Parallel.For(0, group.Length, i =>
                         {
                             var index = start + i;
@@ -56,9 +56,8 @@ namespace LightCurve.Core
         }
 
         /// <summary> 获取一组视频帧，若已到末尾则返回true </summary>
-        private static bool GetFrameGroup(VideoCapture vid, int start, Mat[] group)
+        private static bool GetFrameGroup(VideoCapture vid, Mat[] group)
         {
-            vid.PosFrames = start;
             foreach (var frameRef in group)
                 if (!vid.Read(frameRef))
                     return true;
