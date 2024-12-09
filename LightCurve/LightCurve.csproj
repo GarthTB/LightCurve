@@ -36,9 +36,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
-    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
+    <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.9.0.5494" />
+    <PackageReference Include="Emgu.CV.runtime.windows.cuda" Version="4.5.3.4721" />
+    <PackageReference Include="Emgu.runtime.windows.cuda.dnn.cnn.infer" Version="8.2.0" />
     <PackageReference Include="ScottPlot" Version="5.0.47" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

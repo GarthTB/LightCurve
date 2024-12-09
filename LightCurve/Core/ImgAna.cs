@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using System.IO;
 
 namespace LightCurve.Core
@@ -45,11 +46,11 @@ namespace LightCurve.Core
         /// <summary> 获取一组图片，若已到末尾则返回true </summary>
         private static bool GetImageGroup(List<FileInfo> files, int start, int size, out Mat[] group)
         {
-            group = Enumerable.Range(0, size).Select(_ => new Mat()).ToArray();
+            group = new Mat[size];
             for (int i = 0; i < size; i++)
             {
                 var index = start + i;
-                group[i] = Cv2.ImRead(files[index].FullName);
+                group[i] = new Mat(files[index].FullName, ImreadModes.Unchanged);
                 if (index == files.Count - 1) return true;
             }
             return false;

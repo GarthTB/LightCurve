@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using System.IO;
 
 namespace LightCurve.Core
@@ -24,10 +25,11 @@ namespace LightCurve.Core
                 try
                 {
                     VideoCapture vid = new(file.FullName);
-                    if (vid.FrameCount <= 0)
-                        throw new Exception("无效的视频帧数。");
-                    var values = new double[vid.FrameCount];
+                    var frameCount = (int)vid.Get(CapProp.FrameCount);
+                    if (frameCount <= 0)
+                        throw new Exception("无法获取视频总帧数。");
 
+                    var values = new double[frameCount];
                     var groupSize = 64;
                     for (int start = 0; ; start += groupSize)
                     {
@@ -58,7 +60,8 @@ namespace LightCurve.Core
         /// <summary> 获取一组视频帧，若已到末尾则返回true </summary>
         private static bool GetFrameGroup(VideoCapture vid, int start, int size, out Mat[] group)
         {
-            vid.PosFrames = start;
+            if (!vid.Set(CapProp.PosFrames, start))
+                throw new Exception($"无法设置视频帧位置到第{start}帧。");
             group = Enumerable.Range(0, size).Select(_ => new Mat()).ToArray();
             for (int i = 0; i < size; i++)
                 if (!vid.Read(group[i]))

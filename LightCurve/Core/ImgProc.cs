@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using Emgu.CV;
+using System.Drawing;
 
 namespace LightCurve.Core
 {
@@ -12,13 +13,13 @@ namespace LightCurve.Core
                 return image; // 直接返回全帧
             if (x + w > image.Cols || y + h > image.Rows)
                 throw new ArgumentException("选区超出图像范围");
-            Rect roi = new((int)x, (int)y, (int)w, (int)h); // 若无法转换，应该会在上一步筛掉
+            Rectangle roi = new((int)x, (int)y, (int)w, (int)h); // 若无法转换，应该会在上一步筛掉
             return new Mat(image, roi);
         }
 
         /// <summary> 计算一块ROI图的指定通道的均值 </summary>
         internal static double ChMean(this Mat image, int channel)
-        => image.Channels() switch
+        => image.NumberOfChannels switch
         {
             1 => image.MeanValue1(channel), // 单色图
             3 => image.MeanValue3(channel), // 彩色图
