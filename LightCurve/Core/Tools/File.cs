@@ -43,6 +43,7 @@ namespace LightCurve.Core.Tools
         {
             try { return !new Mat(path).Empty(); }
             catch { return false; }
+            finally { GC.Collect(); }
         }
 
         /// <summary> 判断文件是否全为视频 </summary>
@@ -54,6 +55,7 @@ namespace LightCurve.Core.Tools
         {
             try { return new VideoCapture(path).IsOpened(); }
             catch { return false; }
+            finally { GC.Collect(); }
         }
 
         /// <summary> 生成结果文件名 </summary>

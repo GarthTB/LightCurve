@@ -21,7 +21,8 @@ namespace LightCurve.Core
         => image.Channels() switch
         {
             1 => image.MeanValue1(channel), // 单色图
-            3 or 4 => image.MeanValue34(channel), // 彩色图
+            3 => image.MeanValue3(channel), // 彩色图
+            4 => image.MeanValue4(channel), // 含透明度的彩色图
             _ => throw new ArgumentException("不支持的通道数量"),
         };
 
@@ -29,8 +30,8 @@ namespace LightCurve.Core
         internal static double MeanValue1(this Mat image, int channel)
             => channel is >= 0 and <= 6 ? Cv2.Mean(image).Val0 : 0;
 
-        /// <summary> 获取3或4通道图像指定通道的均值 </summary>
-        internal static double MeanValue34(this Mat image, int channel)
+        /// <summary> 获取3通道图像指定通道的均值 </summary>
+        internal static double MeanValue3(this Mat image, int channel)
         => channel switch
         {
             0 => image.MeanCIEL(),
@@ -45,6 +46,10 @@ namespace LightCurve.Core
             9 => image.MeanH(),
             _ => 0,
         };
+
+        /// <summary> 获取4通道图像指定通道的均值 </summary>
+        internal static double MeanValue4(this Mat image, int channel)
+            => image.CvtColor(ColorConversionCodes.BGRA2BGR).MeanValue3(channel);
 
         /// <summary> 为结果文件名添加通道后缀 </summary>
         internal static string AppendCh(this string name, int channel)
