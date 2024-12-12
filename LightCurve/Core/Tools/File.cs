@@ -1,5 +1,5 @@
-﻿using Emgu.CV;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using OpenCvSharp;
 using System.IO;
 using System.Text;
 
@@ -41,7 +41,7 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为图片 </summary>
         private static bool IsImage(string path)
         {
-            try { return !new Mat(path).IsEmpty; }
+            try { return !new Mat(path).Empty(); }
             catch { return false; }
             finally { GC.Collect(); }
         }
@@ -53,7 +53,7 @@ namespace LightCurve.Core.Tools
         /// <summary> 判断文件是否为视频 </summary>
         private static bool IsVideo(string path)
         {
-            try { return new VideoCapture(path).IsOpened; }
+            try { return new VideoCapture(path).IsOpened(); }
             catch { return false; }
             finally { GC.Collect(); }
         }

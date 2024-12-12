@@ -1,6 +1,4 @@
-﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
-using System.Drawing;
+﻿using OpenCvSharp;
 
 namespace LightCurve.Core
 {
@@ -14,13 +12,13 @@ namespace LightCurve.Core
                 return image; // 直接返回全帧
             if (x + w > image.Cols || y + h > image.Rows)
                 throw new ArgumentException("选区超出图像范围");
-            Rectangle roi = new((int)x, (int)y, (int)w, (int)h); // 若无法转换，应该会在上一步筛掉
+            Rect roi = new((int)x, (int)y, (int)w, (int)h); // 若无法转换，应该会在上一步筛掉
             return new Mat(image, roi);
         }
 
         /// <summary> 计算一块ROI图的指定通道的均值 </summary>
         internal static double ChMean(this Mat image, int channel)
-        => image.NumberOfChannels switch
+        => image.Channels() switch
         {
             1 => image.MeanValue1(channel), // 单色图
             3 => image.MeanValue3(channel), // 彩色图
@@ -30,7 +28,7 @@ namespace LightCurve.Core
 
         /// <summary> 获取单色图像指定通道的均值 </summary>
         internal static double MeanValue1(this Mat image, int channel)
-            => channel is >= 0 and <= 6 ? image.Mean() : 0;
+            => channel is >= 0 and <= 6 ? Cv2.Mean(image).Val0 : 0;
 
         /// <summary> 获取3通道图像指定通道的均值 </summary>
         internal static double MeanValue3(this Mat image, int channel)
@@ -51,7 +49,7 @@ namespace LightCurve.Core
 
         /// <summary> 获取4通道图像指定通道的均值 </summary>
         internal static double MeanValue4(this Mat image, int channel)
-            => image.CvtColor(ColorConversion.Bgra2Bgr).MeanValue3(channel);
+            => image.CvtColor(ColorConversionCodes.BGRA2BGR).MeanValue3(channel);
 
         /// <summary> 为结果文件名添加通道后缀 </summary>
         internal static string AppendCh(this string name, int channel)
