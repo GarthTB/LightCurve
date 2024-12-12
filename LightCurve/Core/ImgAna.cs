@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using System.IO;
 
 namespace LightCurve.Core

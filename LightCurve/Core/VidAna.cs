@@ -1,4 +1,5 @@
-﻿using OpenCvSharp;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using System.IO;
 
 namespace LightCurve.Core
@@ -24,10 +25,11 @@ namespace LightCurve.Core
                 try
                 {
                     VideoCapture vid = new(file.FullName);
-                    if (vid.FrameCount <= 0)
+                    var frameCount = (int)vid.Get(CapProp.FrameCount);
+                    if (frameCount <= 0)
                         throw new Exception("无法获取视频总帧数。");
 
-                    var values = new double[vid.FrameCount];
+                    var values = new double[frameCount];
                     var group = Enumerable.Range(0, 64).Select(_ => new Mat()).ToArray();
                     for (int start = 0; ; start += group.Length)
                     {
